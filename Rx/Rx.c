@@ -307,7 +307,7 @@ struct {
 	unsigned char compare_match_1:1;
 	unsigned char compare_match_2:1;
 	unsigned char compare_match_3:1;
-} user_counter_flugs ;
+} user_counter_flags ;
 
 
 unsigned int counter_on_TCNT1(){

@@ -1,5 +1,4 @@
-Tx.d Tx.o: .././Tx.c \
- E:\Micro_Cirquit\projects\avr\MY\ CAR\ (bt+avr+pc)\MY\ CAR\ (avr\ solution)\defines.h \
+Tx.d Tx.o: .././Tx.c .././Tx.h \
  c:\program\ files\ (x86)\atmel\atmel\ toolchain\avr8\ gcc\native\3.4.1061\avr8-gnu-toolchain\avr\include\avr\io.h \
  c:\program\ files\ (x86)\atmel\atmel\ toolchain\avr8\ gcc\native\3.4.1061\avr8-gnu-toolchain\avr\include\avr\sfr_defs.h \
  c:\program\ files\ (x86)\atmel\atmel\ toolchain\avr8\ gcc\native\3.4.1061\avr8-gnu-toolchain\avr\include\inttypes.h \
@@ -17,7 +16,7 @@ Tx.d Tx.o: .././Tx.c \
  c:\program\ files\ (x86)\atmel\atmel\ toolchain\avr8\ gcc\native\3.4.1061\avr8-gnu-toolchain\avr\include\math.h \
  E:\Micro_Cirquit\projects\avr\MY\ CAR\ (bt+avr+pc)\MY\ CAR\ (avr\ solution)\uart_functions.c
 
-E:\Micro_Cirquit\projects\avr\MY\ CAR\ (bt+avr+pc)\MY\ CAR\ (avr\ solution)\defines.h:
+.././Tx.h:
 
 c:\program\ files\ (x86)\atmel\atmel\ toolchain\avr8\ gcc\native\3.4.1061\avr8-gnu-toolchain\avr\include\avr\io.h:
 

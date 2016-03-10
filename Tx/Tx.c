@@ -4,12 +4,15 @@
  * Created: 24.02.2016 17:58:12
  *  Author: Dan
  */ 
+
+#include "Tx.h"
+/*
 #include "E:\Micro_Cirquit\projects\avr\MY CAR (bt+avr+pc)\MY CAR (avr solution)\defines.h"
 
 #include <avr/io.h>
 #include <avr/interrupt.h>
 #include <util/delay.h>
-
+*/
 #include "E:\Micro_Cirquit\projects\avr\MY CAR (bt+avr+pc)\MY CAR (avr solution)\uart_functions.c"
 
 volatile union {
@@ -68,12 +71,12 @@ volatile union {
 	
 } outbound_processing ;
 
-char		buffer[BUFFER_MAX];
-char		buffer_read=0,
+unsigned char		buffer[BUFFER_MAX];
+unsigned char		buffer_read=0,
 			buffer_write=0;
 
 char F_buffer_read(char n){		// юзаем в вечном цикле, читаем и пихаем в уарт/радиомодуль
-	char word;
+	unsigned char word;
 	if (n == BUFFER_MAX){
 	buffer_read = 0;}				// добавить флаг надобности чтения из буфера с установкой из функции записи
 	else {
@@ -92,7 +95,7 @@ char F_buffer_write(char n, char word){
 
 char interupt_processing(){
 	//выключить интерапты
-	F_buffer_write(buffer_write,);
+	F_buffer_write(buffer_write,UDRE0);
 	//включить интерапты
 }
 
@@ -148,10 +151,13 @@ int main(void)
 	USART_Init(MYUBRR);
 	sei(); 
 	
+	unsigned char asd1;
 	
     while(1)
     {
         
+		asd1 = F_buffer_read(outbound_processing.word);
+		interupt_processing();
 			
     }
 }
