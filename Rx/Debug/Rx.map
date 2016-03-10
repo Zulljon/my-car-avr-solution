@@ -75,17 +75,53 @@ Discarded input sections
  .group         0x00000000        0x8 Rx.o
  .group         0x00000000        0x8 Rx.o
  .group         0x00000000        0x8 Rx.o
+ .group         0x00000000        0x8 Rx.o
  .text          0x00000000        0x0 Rx.o
  .data          0x00000000        0x0 Rx.o
  .bss           0x00000000        0x0 Rx.o
- .text.USART_Transmit
-                0x00000000       0x10 Rx.o
- .text.USART_Receive
-                0x00000000       0x10 Rx.o
  .text.set_servo_math
                 0x00000000       0x2e Rx.o
  .text.PWM_speed_math
                 0x00000000       0x10 Rx.o
+ .group         0x00000000        0x8 uart_function.o
+ .group         0x00000000        0x8 uart_function.o
+ .group         0x00000000        0x8 uart_function.o
+ .group         0x00000000        0x8 uart_function.o
+ .group         0x00000000        0x8 uart_function.o
+ .group         0x00000000        0x8 uart_function.o
+ .group         0x00000000        0x8 uart_function.o
+ .group         0x00000000        0x8 uart_function.o
+ .group         0x00000000        0x8 uart_function.o
+ .group         0x00000000        0x8 uart_function.o
+ .group         0x00000000        0x8 uart_function.o
+ .group         0x00000000        0x8 uart_function.o
+ .group         0x00000000        0x8 uart_function.o
+ .group         0x00000000        0x8 uart_function.o
+ .group         0x00000000        0x8 uart_function.o
+ .group         0x00000000        0x8 uart_function.o
+ .text          0x00000000        0x0 uart_function.o
+ .data          0x00000000        0x0 uart_function.o
+ .bss           0x00000000        0x0 uart_function.o
+ .text.USART_Transmit
+                0x00000000       0x10 uart_function.o
+ .text.USART_Receive
+                0x00000000       0x10 uart_function.o
+ .debug_macro   0x00000000      0xa30 uart_function.o
+ .debug_macro   0x00000000       0x10 uart_function.o
+ .debug_macro   0x00000000      0x1ad uart_function.o
+ .debug_macro   0x00000000      0x293 uart_function.o
+ .debug_macro   0x00000000       0x9e uart_function.o
+ .debug_macro   0x00000000     0x13ae uart_function.o
+ .debug_macro   0x00000000      0x13a uart_function.o
+ .debug_macro   0x00000000       0xbd uart_function.o
+ .debug_macro   0x00000000       0x34 uart_function.o
+ .debug_macro   0x00000000       0x18 uart_function.o
+ .debug_macro   0x00000000       0x6c uart_function.o
+ .debug_macro   0x00000000       0x69 uart_function.o
+ .debug_macro   0x00000000       0x22 uart_function.o
+ .debug_macro   0x00000000       0x10 uart_function.o
+ .debug_macro   0x00000000      0x16d uart_function.o
+ .debug_macro   0x00000000       0x3a uart_function.o
  .text          0x00000000        0x0 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1061/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr5\libm.a(addsf3.o)
  .data          0x00000000        0x0 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1061/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr5\libm.a(addsf3.o)
  .bss           0x00000000        0x0 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1061/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr5\libm.a(addsf3.o)
@@ -196,6 +232,7 @@ Linker script and memory map
 Address of section .data set to 0x800100
 LOAD c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1061/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr5/crtm328p.o
 LOAD Rx.o
+LOAD uart_function.o
 START GROUP
 LOAD c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1061/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr5\libm.a
 END GROUP
@@ -399,20 +436,20 @@ END GROUP
  .text.init_pwm_0
                 0x000004a6        0xe Rx.o
                 0x000004a6                init_pwm_0
- .text.USART_Init
-                0x000004b4       0x1c Rx.o
-                0x000004b4                USART_Init
  .text.__vector_18
-                0x000004d0       0x4a Rx.o
-                0x000004d0                __vector_18
+                0x000004b4       0x4a Rx.o
+                0x000004b4                __vector_18
  .text.__vector_13
-                0x0000051a       0x14 Rx.o
-                0x0000051a                __vector_13
+                0x000004fe       0x14 Rx.o
+                0x000004fe                __vector_13
  .text.init_I_O
-                0x0000052e        0x8 Rx.o
-                0x0000052e                init_I_O
- .text.main     0x00000536       0x16 Rx.o
-                0x00000536                main
+                0x00000512        0x8 Rx.o
+                0x00000512                init_I_O
+ .text.main     0x0000051a       0x16 Rx.o
+                0x0000051a                main
+ .text.USART_Init
+                0x00000530       0x1c uart_function.o
+                0x00000530                USART_Init
  .text.avr-libc.fplib
                 0x0000054c        0xa c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1061/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr5\libm.a(addsf3.o)
                 0x0000054c                __subsf3
@@ -577,6 +614,7 @@ END GROUP
  *(.comment)
  .comment       0x00000000       0x30 Rx.o
                                  0x31 (size before relaxing)
+ .comment       0x00000000       0x31 uart_function.o
 
 .note.gnu.build-id
  *(.note.gnu.build-id)
@@ -593,38 +631,47 @@ END GROUP
 .debug_sfnames
  *(.debug_sfnames)
 
-.debug_aranges  0x00000000       0x98
+.debug_aranges  0x00000000       0xb0
  *(.debug_aranges)
  .debug_aranges
-                0x00000000       0x98 Rx.o
+                0x00000000       0x80 Rx.o
+ .debug_aranges
+                0x00000080       0x30 uart_function.o
 
 .debug_pubnames
  *(.debug_pubnames)
 
-.debug_info     0x00000000      0x7a5
+.debug_info     0x00000000      0x820
  *(.debug_info .gnu.linkonce.wi.*)
- .debug_info    0x00000000      0x7a5 Rx.o
+ .debug_info    0x00000000      0x747 Rx.o
+ .debug_info    0x00000747       0xd9 uart_function.o
 
-.debug_abbrev   0x00000000      0x2f9
+.debug_abbrev   0x00000000      0x34b
  *(.debug_abbrev)
- .debug_abbrev  0x00000000      0x2f9 Rx.o
+ .debug_abbrev  0x00000000      0x2a5 Rx.o
+ .debug_abbrev  0x000002a5       0xa6 uart_function.o
 
-.debug_line     0x00000000      0x767
+.debug_line     0x00000000      0x9b0
  *(.debug_line .debug_line.* .debug_line_end)
- .debug_line    0x00000000      0x767 Rx.o
+ .debug_line    0x00000000      0x67b Rx.o
+ .debug_line    0x0000067b      0x335 uart_function.o
 
-.debug_frame    0x00000000      0x1ac
+.debug_frame    0x00000000      0x1c0
  *(.debug_frame)
- .debug_frame   0x00000000      0x1ac Rx.o
+ .debug_frame   0x00000000      0x17c Rx.o
+ .debug_frame   0x0000017c       0x44 uart_function.o
 
-.debug_str      0x00000000     0x6e58
+.debug_str      0x00000000     0x6e86
  *(.debug_str)
- .debug_str     0x00000000     0x6e58 Rx.o
-                               0x6f3d (size before relaxing)
+ .debug_str     0x00000000     0x6e49 Rx.o
+                               0x6f2e (size before relaxing)
+ .debug_str     0x00006e49       0x3d uart_function.o
+                               0x6ccd (size before relaxing)
 
 .debug_loc      0x00000000      0x41d
  *(.debug_loc)
- .debug_loc     0x00000000      0x41d Rx.o
+ .debug_loc     0x00000000      0x3f7 Rx.o
+ .debug_loc     0x000003f7       0x26 uart_function.o
 
 .debug_macinfo
  *(.debug_macinfo)
@@ -644,27 +691,30 @@ END GROUP
 .debug_pubtypes
  *(.debug_pubtypes)
 
-.debug_ranges   0x00000000       0x88
+.debug_ranges   0x00000000       0x90
  *(.debug_ranges)
- .debug_ranges  0x00000000       0x88 Rx.o
+ .debug_ranges  0x00000000       0x70 Rx.o
+ .debug_ranges  0x00000070       0x20 uart_function.o
 
-.debug_macro    0x00000000     0x286c
+.debug_macro    0x00000000     0x294d
  *(.debug_macro)
- .debug_macro   0x00000000       0xb9 Rx.o
- .debug_macro   0x000000b9      0xa30 Rx.o
- .debug_macro   0x00000ae9       0x52 Rx.o
- .debug_macro   0x00000b3b       0x10 Rx.o
- .debug_macro   0x00000b4b      0x1ad Rx.o
- .debug_macro   0x00000cf8      0x293 Rx.o
- .debug_macro   0x00000f8b       0x9e Rx.o
- .debug_macro   0x00001029     0x13ae Rx.o
- .debug_macro   0x000023d7      0x13a Rx.o
- .debug_macro   0x00002511       0xbd Rx.o
- .debug_macro   0x000025ce       0x34 Rx.o
- .debug_macro   0x00002602       0x18 Rx.o
- .debug_macro   0x0000261a       0x6c Rx.o
- .debug_macro   0x00002686       0x69 Rx.o
- .debug_macro   0x000026ef       0x10 Rx.o
- .debug_macro   0x000026ff      0x16d Rx.o
+ .debug_macro   0x00000000       0xc8 Rx.o
+ .debug_macro   0x000000c8      0xa30 Rx.o
+ .debug_macro   0x00000af8       0x22 Rx.o
+ .debug_macro   0x00000b1a       0x10 Rx.o
+ .debug_macro   0x00000b2a      0x1ad Rx.o
+ .debug_macro   0x00000cd7      0x293 Rx.o
+ .debug_macro   0x00000f6a       0x9e Rx.o
+ .debug_macro   0x00001008     0x13ae Rx.o
+ .debug_macro   0x000023b6      0x13a Rx.o
+ .debug_macro   0x000024f0       0xbd Rx.o
+ .debug_macro   0x000025ad       0x34 Rx.o
+ .debug_macro   0x000025e1       0x18 Rx.o
+ .debug_macro   0x000025f9       0x6c Rx.o
+ .debug_macro   0x00002665       0x69 Rx.o
+ .debug_macro   0x000026ce       0x10 Rx.o
+ .debug_macro   0x000026de      0x16d Rx.o
+ .debug_macro   0x0000284b       0x3a Rx.o
+ .debug_macro   0x00002885       0xc8 uart_function.o
 OUTPUT(Rx.elf elf32-avr)
 LOAD linker stubs

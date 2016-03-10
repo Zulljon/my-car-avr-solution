@@ -1,13 +1,13 @@
 /*
- * main.h
+ * Rx.h
  *
- * Created: 10.03.2016 12:43:59
+ * Created: 10.03.2016 13:08:17
  *  Author: Dan
  */ 
 
 
-#ifndef Tx_H_
-#define Tx_H_
+#ifndef RX_H_
+#define RX_H_
 
 #define F_CPU 16000000
 #define FOSC 16000000 // Clock Speed
@@ -17,12 +17,12 @@
 #include <avr/io.h>
 #include <avr/interrupt.h>
 #include <util/delay.h>
-
-
+#include <math.h>
+#include "uart_function.h"
 
 #define BUFFER_MAX 8
 
-//---------------SWITCH_word_processing-----------//
+//---------------SWITCH--------------------------//
 #define not_set_yet				0x0
 #define SET_SERVO_RIGHT			0x1				// пока оставим для отладки в железе
 #define MOTORchik				0x2
@@ -34,5 +34,16 @@
 //---------------------------------------------//
 
 
+void init_variables_main(void);
+float set_servo_math(char a);
+void init_variables(void);
+unsigned char PWM_speed_math(unsigned char pwm_speeeds);
+unsigned int servo_angle(unsigned char r);
+unsigned char processing( unsigned char resive_word );
+void LEDs_manipulations(void);
+void init_pwm_1 (void);
+void init_pwm_0 (void);
+void init_I_O (void);
 
-#endif /* MAIN_H_ */
+
+#endif /* RX_H_ */

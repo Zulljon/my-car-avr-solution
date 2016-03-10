@@ -37,7 +37,8 @@ SUBDIRS :=
 
 # Add inputs and outputs from these tool invocations to the build variables 
 C_SRCS +=  \
-../Rx.c
+../Rx.c \
+../uart_function.c
 
 
 PREPROCESSING_SRCS += 
@@ -47,16 +48,20 @@ ASM_SRCS +=
 
 
 OBJS +=  \
-Rx.o
+Rx.o \
+uart_function.o
 
 OBJS_AS_ARGS +=  \
-Rx.o
+Rx.o \
+uart_function.o
 
 C_DEPS +=  \
-Rx.d
+Rx.d \
+uart_function.d
 
 C_DEPS_AS_ARGS +=  \
-Rx.d
+Rx.d \
+uart_function.d
 
 OUTPUT_FILE_PATH +=Rx.elf
 
@@ -72,6 +77,8 @@ LINKER_SCRIPT_DEP+=
 
 
 # AVR32/GNU C Compiler
+
+
 
 
 

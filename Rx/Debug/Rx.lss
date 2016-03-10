@@ -9,23 +9,23 @@ Idx Name          Size      VMA       LMA       File off  Algn
                   ALLOC
   2 .comment      00000030  00000000  00000000  000009a4  2**0
                   CONTENTS, READONLY
-  3 .debug_aranges 00000098  00000000  00000000  000009d4  2**0
+  3 .debug_aranges 000000b0  00000000  00000000  000009d4  2**0
                   CONTENTS, READONLY, DEBUGGING
-  4 .debug_info   000007a5  00000000  00000000  00000a6c  2**0
+  4 .debug_info   00000820  00000000  00000000  00000a84  2**0
                   CONTENTS, READONLY, DEBUGGING
-  5 .debug_abbrev 000002f9  00000000  00000000  00001211  2**0
+  5 .debug_abbrev 0000034b  00000000  00000000  000012a4  2**0
                   CONTENTS, READONLY, DEBUGGING
-  6 .debug_line   00000767  00000000  00000000  0000150a  2**0
+  6 .debug_line   000009b0  00000000  00000000  000015ef  2**0
                   CONTENTS, READONLY, DEBUGGING
-  7 .debug_frame  000001ac  00000000  00000000  00001c74  2**2
+  7 .debug_frame  000001c0  00000000  00000000  00001fa0  2**2
                   CONTENTS, READONLY, DEBUGGING
-  8 .debug_str    00006e58  00000000  00000000  00001e20  2**0
+  8 .debug_str    00006e86  00000000  00000000  00002160  2**0
                   CONTENTS, READONLY, DEBUGGING
-  9 .debug_loc    0000041d  00000000  00000000  00008c78  2**0
+  9 .debug_loc    0000041d  00000000  00000000  00008fe6  2**0
                   CONTENTS, READONLY, DEBUGGING
- 10 .debug_ranges 00000088  00000000  00000000  00009095  2**0
+ 10 .debug_ranges 00000090  00000000  00000000  00009403  2**0
                   CONTENTS, READONLY, DEBUGGING
- 11 .debug_macro  0000286c  00000000  00000000  0000911d  2**0
+ 11 .debug_macro  0000294d  00000000  00000000  00009493  2**0
                   CONTENTS, READONLY, DEBUGGING
 
 Disassembly of section .text:
@@ -57,7 +57,7 @@ Disassembly of section .text:
   2e:	00 00       	nop
   30:	32 c0       	rjmp	.+100    	; 0x96 <__bad_interrupt>
   32:	00 00       	nop
-  34:	72 c2       	rjmp	.+1252   	; 0x51a <__vector_13>
+  34:	64 c2       	rjmp	.+1224   	; 0x4fe <__vector_13>
   36:	00 00       	nop
   38:	2e c0       	rjmp	.+92     	; 0x96 <__bad_interrupt>
   3a:	00 00       	nop
@@ -67,7 +67,7 @@ Disassembly of section .text:
   42:	00 00       	nop
   44:	28 c0       	rjmp	.+80     	; 0x96 <__bad_interrupt>
   46:	00 00       	nop
-  48:	43 c2       	rjmp	.+1158   	; 0x4d0 <__vector_18>
+  48:	35 c2       	rjmp	.+1130   	; 0x4b4 <__vector_18>
   4a:	00 00       	nop
   4c:	24 c0       	rjmp	.+72     	; 0x96 <__bad_interrupt>
   4e:	00 00       	nop
@@ -112,7 +112,7 @@ Disassembly of section .text:
   8c:	ac 31       	cpi	r26, 0x1C	; 28
   8e:	b2 07       	cpc	r27, r18
   90:	e1 f7       	brne	.-8      	; 0x8a <.do_clear_bss_loop>
-  92:	51 d2       	rcall	.+1186   	; 0x536 <main>
+  92:	43 d2       	rcall	.+1158   	; 0x51a <main>
   94:	4b c4       	rjmp	.+2198   	; 0x92c <_exit>
 
 00000096 <__bad_interrupt>:
@@ -689,135 +689,137 @@ void init_pwm_0 (void){
  4ae:	10 92 6e 00 	sts	0x006E, r1
  4b2:	08 95       	ret
 
-000004b4 <USART_Init>:
-//инициализация апаратного USART
-//настраивам регистры
-void USART_Init(unsigned int UBRR)
-{
-	//Set baud rate
-	UBRR0H = (unsigned char)(UBRR>>8);
- 4b4:	90 93 c5 00 	sts	0x00C5, r25
-	UBRR0L = (unsigned char)UBRR;
- 4b8:	80 93 c4 00 	sts	0x00C4, r24
-	UCSR0A = (0<<RXC0)|(0<<TXC0)|(1<<UDRE0)|(0<<FE0)|(0<<DOR0)|(0<<UPE0)|(0<<U2X0)|(0<<MPCM0);
- 4bc:	80 e2       	ldi	r24, 0x20	; 32
- 4be:	80 93 c0 00 	sts	0x00C0, r24
-	//Enable receiver and transmitter
-	UCSR0B=(1<<RXCIE0)|(0<<TXCIE0)|(0<<UDRIE0)|(1<<RXEN0)|(1<<TXEN0)|(0<<UCSZ02)|(0<<RXB80)|(0<<TXB80);
- 4c2:	88 e9       	ldi	r24, 0x98	; 152
- 4c4:	80 93 c1 00 	sts	0x00C1, r24
-	// Set frame format: 8data, 2stop bit
-	UCSR0C=(0<<UMSEL01)|(0<<UMSEL00)|(0<<UPM01)|(0<<UPM00)|(0<<USBS0)|(1<<UCSZ01)|(1<<UCSZ00)|(0<<UCPOL0);
- 4c8:	86 e0       	ldi	r24, 0x06	; 6
- 4ca:	80 93 c2 00 	sts	0x00C2, r24
- 4ce:	08 95       	ret
-
-000004d0 <__vector_18>:
+000004b4 <__vector_18>:
+	//TIFR0 = (0<<OCF0B)|(0<<OCF0A)|(0<<TOV0);
+	//TCNT0 OCR0A OCR0B
 }
 
 ISR(USART_RX_vect){
- 4d0:	1f 92       	push	r1
- 4d2:	0f 92       	push	r0
- 4d4:	0f b6       	in	r0, 0x3f	; 63
- 4d6:	0f 92       	push	r0
- 4d8:	11 24       	eor	r1, r1
- 4da:	2f 93       	push	r18
- 4dc:	3f 93       	push	r19
- 4de:	4f 93       	push	r20
- 4e0:	5f 93       	push	r21
- 4e2:	6f 93       	push	r22
- 4e4:	7f 93       	push	r23
- 4e6:	8f 93       	push	r24
- 4e8:	9f 93       	push	r25
- 4ea:	af 93       	push	r26
- 4ec:	bf 93       	push	r27
- 4ee:	ef 93       	push	r30
- 4f0:	ff 93       	push	r31
+ 4b4:	1f 92       	push	r1
+ 4b6:	0f 92       	push	r0
+ 4b8:	0f b6       	in	r0, 0x3f	; 63
+ 4ba:	0f 92       	push	r0
+ 4bc:	11 24       	eor	r1, r1
+ 4be:	2f 93       	push	r18
+ 4c0:	3f 93       	push	r19
+ 4c2:	4f 93       	push	r20
+ 4c4:	5f 93       	push	r21
+ 4c6:	6f 93       	push	r22
+ 4c8:	7f 93       	push	r23
+ 4ca:	8f 93       	push	r24
+ 4cc:	9f 93       	push	r25
+ 4ce:	af 93       	push	r26
+ 4d0:	bf 93       	push	r27
+ 4d2:	ef 93       	push	r30
+ 4d4:	ff 93       	push	r31
 	//buffer_RX(UDR0);
 	//processing(buffer_RX(UDR0));
 	//buffer_receive = UDR0;
 	//PORTB = UDR0 ;
 	processing(UDR0);
- 4f2:	80 91 c6 00 	lds	r24, 0x00C6
- 4f6:	fa de       	rcall	.-524    	; 0x2ec <processing>
+ 4d6:	80 91 c6 00 	lds	r24, 0x00C6
+ 4da:	08 df       	rcall	.-496    	; 0x2ec <processing>
 }
- 4f8:	ff 91       	pop	r31
- 4fa:	ef 91       	pop	r30
- 4fc:	bf 91       	pop	r27
- 4fe:	af 91       	pop	r26
- 500:	9f 91       	pop	r25
- 502:	8f 91       	pop	r24
- 504:	7f 91       	pop	r23
- 506:	6f 91       	pop	r22
- 508:	5f 91       	pop	r21
- 50a:	4f 91       	pop	r20
- 50c:	3f 91       	pop	r19
- 50e:	2f 91       	pop	r18
- 510:	0f 90       	pop	r0
- 512:	0f be       	out	0x3f, r0	; 63
- 514:	0f 90       	pop	r0
- 516:	1f 90       	pop	r1
- 518:	18 95       	reti
+ 4dc:	ff 91       	pop	r31
+ 4de:	ef 91       	pop	r30
+ 4e0:	bf 91       	pop	r27
+ 4e2:	af 91       	pop	r26
+ 4e4:	9f 91       	pop	r25
+ 4e6:	8f 91       	pop	r24
+ 4e8:	7f 91       	pop	r23
+ 4ea:	6f 91       	pop	r22
+ 4ec:	5f 91       	pop	r21
+ 4ee:	4f 91       	pop	r20
+ 4f0:	3f 91       	pop	r19
+ 4f2:	2f 91       	pop	r18
+ 4f4:	0f 90       	pop	r0
+ 4f6:	0f be       	out	0x3f, r0	; 63
+ 4f8:	0f 90       	pop	r0
+ 4fa:	1f 90       	pop	r1
+ 4fc:	18 95       	reti
 
-0000051a <__vector_13>:
+000004fe <__vector_13>:
 
 ISR(TIMER1_OVF_vect){
- 51a:	1f 92       	push	r1
- 51c:	0f 92       	push	r0
- 51e:	0f b6       	in	r0, 0x3f	; 63
- 520:	0f 92       	push	r0
- 522:	11 24       	eor	r1, r1
+ 4fe:	1f 92       	push	r1
+ 500:	0f 92       	push	r0
+ 502:	0f b6       	in	r0, 0x3f	; 63
+ 504:	0f 92       	push	r0
+ 506:	11 24       	eor	r1, r1
 	//counter_on_TCNT1();
 	//contact_bounce(PORTB,PORTB5);
 	//made_randoms_N();
 }
- 524:	0f 90       	pop	r0
- 526:	0f be       	out	0x3f, r0	; 63
- 528:	0f 90       	pop	r0
- 52a:	1f 90       	pop	r1
- 52c:	18 95       	reti
+ 508:	0f 90       	pop	r0
+ 50a:	0f be       	out	0x3f, r0	; 63
+ 50c:	0f 90       	pop	r0
+ 50e:	1f 90       	pop	r1
+ 510:	18 95       	reti
 
-0000052e <init_I_O>:
+00000512 <init_I_O>:
 
 void init_I_O (void){
 	PORTB=(0<<PORTB0)|(0<<PORTB1)|(0<<PORTB2)|(0<<PORTB3)|(0<<PORTB4)|(0<<PORTB5);
- 52e:	15 b8       	out	0x05, r1	; 5
+ 512:	15 b8       	out	0x05, r1	; 5
 	DDRB= (1<<DDB0)|(1<<DDB1)|(1<<DDB2)|(1<<DDB3)|(1<<DDB4)|(1<<DDB5);
- 530:	8f e3       	ldi	r24, 0x3F	; 63
- 532:	84 b9       	out	0x04, r24	; 4
- 534:	08 95       	ret
+ 514:	8f e3       	ldi	r24, 0x3F	; 63
+ 516:	84 b9       	out	0x04, r24	; 4
+ 518:	08 95       	ret
 
-00000536 <main>:
+0000051a <main>:
 }
 
 int main(void)
 {
 	
 	init_I_O();
- 536:	fb df       	rcall	.-10     	; 0x52e <init_I_O>
+ 51a:	fb df       	rcall	.-10     	; 0x512 <init_I_O>
 	//init_pwm_2();
 	init_pwm_1();
- 538:	a3 df       	rcall	.-186    	; 0x480 <init_pwm_1>
+ 51c:	b1 df       	rcall	.-158    	; 0x480 <init_pwm_1>
 	init_pwm_0();
- 53a:	b5 df       	rcall	.-150    	; 0x4a6 <init_pwm_0>
+ 51e:	c3 df       	rcall	.-122    	; 0x4a6 <init_pwm_0>
 	init_variables_main();
- 53c:	ad dd       	rcall	.-1190   	; 0x98 <init_variables_main>
+ 520:	bb dd       	rcall	.-1162   	; 0x98 <init_variables_main>
 	USART_Init(MYUBRR);
- 53e:	87 e6       	ldi	r24, 0x67	; 103
- 540:	90 e0       	ldi	r25, 0x00	; 0
- 542:	b8 df       	rcall	.-144    	; 0x4b4 <USART_Init>
+ 522:	87 e6       	ldi	r24, 0x67	; 103
+ 524:	90 e0       	ldi	r25, 0x00	; 0
+ 526:	04 d0       	rcall	.+8      	; 0x530 <USART_Init>
 	sei(); 
- 544:	78 94       	sei
+ 528:	78 94       	sei
 	
 	
 	while(1)
 	{
 		
 		init_variables();
- 546:	cd dd       	rcall	.-1126   	; 0xe2 <init_variables>
+ 52a:	db dd       	rcall	.-1098   	; 0xe2 <init_variables>
 		LEDs_manipulations();
- 548:	6b df       	rcall	.-298    	; 0x420 <LEDs_manipulations>
- 54a:	fd cf       	rjmp	.-6      	; 0x546 <main+0x10>
+ 52c:	79 df       	rcall	.-270    	; 0x420 <LEDs_manipulations>
+ 52e:	fd cf       	rjmp	.-6      	; 0x52a <main+0x10>
+
+00000530 <USART_Init>:
+//инициализация апаратного USART
+//настраивам регистры
+void USART_Init(unsigned int UBRR)
+{
+	//Set baud rate
+	UBRR0H = (unsigned char)(UBRR>>8);
+ 530:	90 93 c5 00 	sts	0x00C5, r25
+	UBRR0L = (unsigned char)UBRR;
+ 534:	80 93 c4 00 	sts	0x00C4, r24
+	UCSR0A = (0<<RXC0)|(0<<TXC0)|(1<<UDRE0)|(0<<FE0)|(0<<DOR0)|(0<<UPE0)|(0<<U2X0)|(0<<MPCM0);
+ 538:	80 e2       	ldi	r24, 0x20	; 32
+ 53a:	80 93 c0 00 	sts	0x00C0, r24
+	//Enable receiver and transmitter
+	UCSR0B=(1<<RXCIE0)|(0<<TXCIE0)|(0<<UDRIE0)|(1<<RXEN0)|(1<<TXEN0)|(0<<UCSZ02)|(0<<RXB80)|(0<<TXB80);
+ 53e:	88 e9       	ldi	r24, 0x98	; 152
+ 540:	80 93 c1 00 	sts	0x00C1, r24
+	// Set frame format: 8data, 2stop bit
+	UCSR0C=(0<<UMSEL01)|(0<<UMSEL00)|(0<<UPM01)|(0<<UPM00)|(0<<USBS0)|(1<<UCSZ01)|(1<<UCSZ00)|(0<<UCPOL0);
+ 544:	86 e0       	ldi	r24, 0x06	; 6
+ 546:	80 93 c2 00 	sts	0x00C2, r24
+ 54a:	08 95       	ret
 
 0000054c <__subsf3>:
  54c:	50 58       	subi	r21, 0x80	; 128
