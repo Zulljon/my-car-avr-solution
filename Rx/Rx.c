@@ -12,21 +12,28 @@
 
 #include "Rx.h"
 
-
 struct {
-	//фары передние 60 градусов с ШИМ
-	unsigned char on_off:1;
-	//яркость фар
-	unsigned char brightness:4;
-} headlights;// буфер для принятых переменных для фар
+	struct {
+		//фары передние 60 градусов с ШИМ
+		unsigned char on_off:1;
+		//яркость фар
+		unsigned char brightness:4;
+		} headlights;// буфер для принятых переменных для фар
 
-struct {
-	//габариты задние красный/синий
-	unsigned char back_red:1;
-	unsigned char back_blue:1;
-	//поворотники левые/правые соответственно
-	unsigned char parking_lights_left:1;
-	unsigned char parking_lights_right:1;
+	struct {
+		//вкл/выкл
+		unsigned char on_green:1;
+		unsigned char on_blue:1;
+		//яркость
+		unsigned char brightness_green:4;
+		unsigned char brightness_blue:4;
+		} neon_buffer;// буфер для принятых переменных подсветки
+
+	struct {
+		//задние огни
+		unsigned char on_off:1;
+		}parking_lights;
+
 } LED;// буфер для принятых переменных для габаритов и поворотников
 
 struct {
@@ -65,24 +72,21 @@ volatile union {
 		unsigned char p_w_m:4;
 		unsigned char on_off:1;
 		unsigned char assignation:3;
-	} front_leds;
+	} headlight;
 	
 	//--------------подсветка---------
 	struct {
 		unsigned char pwm			:4; // ШИМ равен 0b0000 выключить порты 1 или 0
 		unsigned char color			:1; //выбор цвета для установки ШИМ, 1-зел 0-син.
 		unsigned char assignation	:3;
-	} motor;
+	} neon;
 	
-	// задние огни, поворотники, подсветка снизу
+	// задние огни
 	struct {
-		unsigned char blue:1;
-		unsigned char red:1;
-		unsigned char parking_lights_right:1;
-		unsigned char parking_lights_left:1;
-		unsigned char neon_light:1;
+		unsigned char :4;
+		unsigned char on_off:1;
 		unsigned char assignation:3;
-	} back_leds;
+	} parking_lights;
 	
 	//установка частоты шима двигателя
 	struct {
@@ -220,7 +224,7 @@ unsigned char processing( unsigned char resive_word ){
 		else {
 			pwm_speed = PWM_speed_math(inbound_processing.motor.speed);			//	записать в ШИМ одну из ... скоростей!!!
 			OCR0B = pwm_speed;
-			if (inbound_processing.motor.spin_rotation){PORTB |= (1<<PORTB0);} else {PORTB &= ~(1<<PORTB0);} // поменять ногу в будущем!!!
+			if (inbound_processing.motor.spin_rotation){PORTB |= (1<<P_MOTOR_SIDE);} else {PORTB &= ~(1<<P_MOTOR_SIDE);} // поменять ногу в будущем!!!
 			TCCR0A |= (1<<COM0B1)|(1<<COM0B0);	// включаю ногу OC0B
 			}
 		//USART_Transmit(timer0_top_value);
@@ -238,19 +242,33 @@ unsigned char processing( unsigned char resive_word ){
 
 		break;
 		
-		case LEDS_FRONT:
-			headlights.on_off	=	inbound_processing.front_leds.on_off; // включаем фары
-			headlights.brightness = inbound_processing.front_leds.p_w_m; 
+		case LED_HEADLIGHTS:
+			LED.headlights.on_off	=	inbound_processing.headlight.on_off; // включаем фары
+			LED.headlights.brightness = inbound_processing.headlight.p_w_m; 
 			// установка яркости ФАР
-			// настроить таймер1
+			// настроить таймер1 OC1B
 			//и переcчитать туды inbound_processing.front_leds.p_w_m
 			init_variables_state.leds = 0x1;
 		break;
-		case LEDS_B_PS:
-			LED.back_blue	=	inbound_processing.back_leds.blue;
-			LED.back_red	=	inbound_processing.back_leds.red;
-			LED.parking_lights_left	=	inbound_processing.back_leds.parking_lights_left;
-			LED.parking_lights_right	=	inbound_processing.back_leds.parking_lights_right;
+			
+		case NEON:
+			if (inbound_processing.neon.pwm == 0b0000){
+				if (inbound_processing.neon.color){
+					LED.neon_buffer.on_green = 0b0;
+				}else{
+					LED.neon_buffer.on_blue = 0b0;}
+			} else {
+				if (inbound_processing.neon.color){
+					LED.neon_buffer.brightness_green = inbound_processing.neon.pwm;
+					}else{
+				LED.neon_buffer.brightness_blue = inbound_processing.neon.pwm;}
+			}
+			
+			init_variables_state.leds = 0x1;
+		break;
+		
+		case LEDS_PS:
+			LED.parking_lights.on_off	=	inbound_processing.parking_lights.on_off;
 			init_variables_state.leds = 0x1;
 		break;
 		
@@ -289,14 +307,28 @@ void LEDs_manipulations(void){
 		
 	if (init_variables_state.leds){
 		
-		if (LED.back_blue)		{	PORTB |= 1<<PORTB2 ;	}	else { PORTB &= ~(1<<PORTB2); }
-		if (LED.back_red)		{	PORTB |= 1<<PORTB3 ;	}	else { PORTB &= ~(1<<PORTB3); }
-		if (LED.parking_lights_left)	{	PORTB |= 1<<PORTB4 ;	}	else { PORTB &= ~(1<<PORTB4); }
-		if (LED.parking_lights_right)		{	PORTB |= 1<<PORTB3 ; 	}	else { PORTB &= ~(1<<PORTB5); }
-		if (headlights.on_off == 1)	{
-			// дернуть ногу 
-			a = (unsigned char) ((headlights.brightness/16)*255);
-			// записать переменную а в таймер2 	
+		if (!LED.neon_buffer.on_green){
+			//отключить OC2A от таймера;	
+			}else {
+			//включить OC2A
+			//записать OC2A = LED.neon_buffer.brightness_green
+			}
+			
+		if (!LED.neon_buffer.on_blue){
+			//отключить OC2B от таймера;
+			}else {
+			//включить OC2B
+			//записать OC2B = LED.neon_buffer.brightness_blue
+		}
+			
+		if (LED.parking_lights.on_off)	{	P_PARKING_LIGHT_1 ;	}	else { P_PARKING_LIGHT_0; }
+			
+		if (LED.headlights.on_off == 1)	{
+			// дёрнуть ногу 
+			a = (unsigned char) ((LED.headlights.brightness/16)*255);
+			// записать переменную а в таймер1 	
+			//OCR1BH
+			//OCR1BL
 		}else{
 			a = 120;//joke :)
 		}
@@ -339,12 +371,12 @@ unsigned int made_randoms_N(){
 }
 */
 
-void init_pwm_2 (void){
+void init_pwm_2 (void){ //только для подсветки
 	TCCR2A = (0<<COM2A1)|(0<<COM2A0)|(0<<COM2B1)|(0<<COM2B0)|(0<<WGM21)|(0<<WGM20);
 	TCCR2B = (0<<FOC2A)|(0<<FOC2B)|(0<<WGM22)|(1<<CS22)|(1<<CS21)|(1<<CS20);
 	TIMSK2 = (0<<OCIE2B)|(0<<OCIE2A)|(0<<TOIE2);
-	TIFR2 = (0<<OCF2B)|(1<<OCF2A)|(1<<TOV2);
-	ASSR = (1<<EXCLK)|(1<<AS2);|(0<<TCN2UB)|(0<<OCR2AUB)|(0<<OCR2BUB)|(0<<TCR2AUB)(0<<TCR2BUB);
+	TIFR2 =	(0<<OCF2B)|(1<<OCF2A)|(1<<TOV2);
+	ASSR = (1<<EXCLK)|(1<<AS2)|(0<<TCN2UB)|(0<<OCR2AUB)|(0<<OCR2BUB)|(0<<TCR2AUB)|(0<<TCR2BUB);
 	GTCCR = (0<<TSM)|(0<<PSRASY)|(0<<PSRSYNC);
 	OCR2A = 128;
 	OCR2B = 128;
