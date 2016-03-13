@@ -17,7 +17,7 @@
 #include <avr/io.h>
 #include <avr/interrupt.h>
 #include <util/delay.h>
-
+#include "FSM_ADC.h"
 
 
 #define BUFFER_MAX 8

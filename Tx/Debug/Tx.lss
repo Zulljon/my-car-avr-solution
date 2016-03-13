@@ -3,27 +3,27 @@ Tx.elf:     file format elf32-avr
 
 Sections:
 Idx Name          Size      VMA       LMA       File off  Algn
-  0 .text         00000170  00000000  00000000  00000074  2**1
+  0 .text         00000150  00000000  00000000  00000074  2**1
                   CONTENTS, ALLOC, LOAD, READONLY, CODE
-  1 .bss          0000000b  00800100  00800100  000001e4  2**0
+  1 .bss          0000000a  00800100  00800100  000001c4  2**0
                   ALLOC
-  2 .comment      00000030  00000000  00000000  000001e4  2**0
+  2 .comment      00000030  00000000  00000000  000001c4  2**0
                   CONTENTS, READONLY
-  3 .debug_aranges 00000078  00000000  00000000  00000214  2**0
+  3 .debug_aranges 00000098  00000000  00000000  000001f4  2**0
                   CONTENTS, READONLY, DEBUGGING
-  4 .debug_info   000004c8  00000000  00000000  0000028c  2**0
+  4 .debug_info   00000512  00000000  00000000  0000028c  2**0
                   CONTENTS, READONLY, DEBUGGING
-  5 .debug_abbrev 000001c6  00000000  00000000  00000754  2**0
+  5 .debug_abbrev 00000205  00000000  00000000  0000079e  2**0
                   CONTENTS, READONLY, DEBUGGING
-  6 .debug_line   00000201  00000000  00000000  0000091a  2**0
+  6 .debug_line   00000247  00000000  00000000  000009a3  2**0
                   CONTENTS, READONLY, DEBUGGING
-  7 .debug_frame  000000ec  00000000  00000000  00000b1c  2**2
+  7 .debug_frame  00000110  00000000  00000000  00000bec  2**2
                   CONTENTS, READONLY, DEBUGGING
-  8 .debug_str    000002c9  00000000  00000000  00000c08  2**0
+  8 .debug_str    000002e0  00000000  00000000  00000cfc  2**0
                   CONTENTS, READONLY, DEBUGGING
-  9 .debug_loc    000000ef  00000000  00000000  00000ed1  2**0
+  9 .debug_loc    000000ef  00000000  00000000  00000fdc  2**0
                   CONTENTS, READONLY, DEBUGGING
- 10 .debug_ranges 00000068  00000000  00000000  00000fc0  2**0
+ 10 .debug_ranges 00000078  00000000  00000000  000010cb  2**0
                   CONTENTS, READONLY, DEBUGGING
 
 Disassembly of section .text:
@@ -45,12 +45,12 @@ Disassembly of section .text:
   34:	0c 94 46 00 	jmp	0x8c	; 0x8c <__bad_interrupt>
   38:	0c 94 46 00 	jmp	0x8c	; 0x8c <__bad_interrupt>
   3c:	0c 94 46 00 	jmp	0x8c	; 0x8c <__bad_interrupt>
-  40:	0c 94 90 00 	jmp	0x120	; 0x120 <__vector_16>
+  40:	0c 94 80 00 	jmp	0x100	; 0x100 <__vector_16>
   44:	0c 94 46 00 	jmp	0x8c	; 0x8c <__bad_interrupt>
   48:	0c 94 46 00 	jmp	0x8c	; 0x8c <__bad_interrupt>
   4c:	0c 94 46 00 	jmp	0x8c	; 0x8c <__bad_interrupt>
   50:	0c 94 46 00 	jmp	0x8c	; 0x8c <__bad_interrupt>
-  54:	0c 94 9a 00 	jmp	0x134	; 0x134 <__vector_21>
+  54:	0c 94 8a 00 	jmp	0x114	; 0x114 <__vector_21>
   58:	0c 94 46 00 	jmp	0x8c	; 0x8c <__bad_interrupt>
   5c:	0c 94 46 00 	jmp	0x8c	; 0x8c <__bad_interrupt>
   60:	0c 94 46 00 	jmp	0x8c	; 0x8c <__bad_interrupt>
@@ -74,207 +74,190 @@ Disassembly of section .text:
   7c:	1d 92       	st	X+, r1
 
 0000007e <.do_clear_bss_start>:
-  7e:	ab 30       	cpi	r26, 0x0B	; 11
+  7e:	aa 30       	cpi	r26, 0x0A	; 10
   80:	b2 07       	cpc	r27, r18
   82:	e1 f7       	brne	.-8      	; 0x7c <.do_clear_bss_loop>
-  84:	0e 94 a4 00 	call	0x148	; 0x148 <main>
-  88:	0c 94 b6 00 	jmp	0x16c	; 0x16c <_exit>
+  84:	0e 94 94 00 	call	0x128	; 0x128 <main>
+  88:	0c 94 a6 00 	jmp	0x14c	; 0x14c <_exit>
 
 0000008c <__bad_interrupt>:
   8c:	0c 94 00 00 	jmp	0	; 0x0 <__vectors>
 
-00000090 <F_buffer_read>:
+00000090 <FSM_ADC>:
+ * Created: 10.03.2016 13:49:15
+ *  Author: Dan
+ */ 
+
+
+void FSM_ADC(void){
+  90:	08 95       	ret
+
+00000092 <F_buffer_read>:
 unsigned char		buffer_read=0,
 			buffer_write=0;
 
 char F_buffer_read(char n){		// юзаем в вечном цикле, читаем и пихаем в уарт/радиомодуль
 	unsigned char word;
 	if (n == BUFFER_MAX){
-  90:	88 30       	cpi	r24, 0x08	; 8
-  92:	19 f4       	brne	.+6      	; 0x9a <F_buffer_read+0xa>
+  92:	88 30       	cpi	r24, 0x08	; 8
+  94:	19 f4       	brne	.+6      	; 0x9c <F_buffer_read+0xa>
 	buffer_read = 0;}				// добавить флаг надобности чтения из буфера с установкой из функции записи
-  94:	10 92 01 01 	sts	0x0101, r1
-  98:	01 c0       	rjmp	.+2      	; 0x9c <F_buffer_read+0xc>
+  96:	10 92 00 01 	sts	0x0100, r1
+  9a:	01 c0       	rjmp	.+2      	; 0x9e <F_buffer_read+0xc>
 	else {
 		word = buffer[n];
 	++n;}
-  9a:	8f 5f       	subi	r24, 0xFF	; 255
+  9c:	8f 5f       	subi	r24, 0xFF	; 255
 	return buffer[n];
-  9c:	e8 2f       	mov	r30, r24
-  9e:	f0 e0       	ldi	r31, 0x00	; 0
-  a0:	ee 5f       	subi	r30, 0xFE	; 254
-  a2:	fe 4f       	sbci	r31, 0xFE	; 254
+  9e:	e8 2f       	mov	r30, r24
+  a0:	f0 e0       	ldi	r31, 0x00	; 0
+  a2:	ef 5f       	subi	r30, 0xFF	; 255
+  a4:	fe 4f       	sbci	r31, 0xFE	; 254
 }
-  a4:	80 81       	ld	r24, Z
-  a6:	08 95       	ret
+  a6:	80 81       	ld	r24, Z
+  a8:	08 95       	ret
 
-000000a8 <F_buffer_write>:
-
-char F_buffer_write(char n, char word){
-	if (n == BUFFER_MAX){
-  a8:	88 30       	cpi	r24, 0x08	; 8
-  aa:	19 f4       	brne	.+6      	; 0xb2 <F_buffer_write+0xa>
-		buffer_write = 0;}
-  ac:	10 92 00 01 	sts	0x0100, r1
-  b0:	08 95       	ret
-	else {
-		buffer[n] = word;
-  b2:	e8 2f       	mov	r30, r24
-  b4:	f0 e0       	ldi	r31, 0x00	; 0
-  b6:	ee 5f       	subi	r30, 0xFE	; 254
-  b8:	fe 4f       	sbci	r31, 0xFE	; 254
-  ba:	60 83       	st	Z, r22
-		++n;}
-}
-  bc:	08 95       	ret
-
-000000be <interupt_processing>:
-
-char interupt_processing(){
-	//выключить интерапты
+000000aa <init_ADC>:
 	F_buffer_write(buffer_write,UDRE0);
-  be:	65 e0       	ldi	r22, 0x05	; 5
-  c0:	80 91 00 01 	lds	r24, 0x0100
-  c4:	0e 94 54 00 	call	0xa8	; 0xa8 <F_buffer_write>
 	//включить интерапты
 }
-  c8:	08 95       	ret
-
-000000ca <init_ADC>:
 
 void init_ADC(void){
 	ADMUX = (1<<REFS1)|(1<<REFS0)|(1<<ADLAR)|(0<<MUX3)|(0<<MUX2)|(0<<MUX1)|(0<<MUX0);
-  ca:	80 ee       	ldi	r24, 0xE0	; 224
-  cc:	80 93 7c 00 	sts	0x007C, r24
+  aa:	80 ee       	ldi	r24, 0xE0	; 224
+  ac:	80 93 7c 00 	sts	0x007C, r24
 	ADCSRA = (0<<ADEN)|(1<<ADSC)|(0<<ADATE)|(0<<ADIF)|(1<<ADIE)|(1<<ADPS2)|(1<<ADPS1)|(1<<ADPS0);
-  d0:	8f e4       	ldi	r24, 0x4F	; 79
-  d2:	80 93 7a 00 	sts	0x007A, r24
+  b0:	8f e4       	ldi	r24, 0x4F	; 79
+  b2:	80 93 7a 00 	sts	0x007A, r24
 	//ADCSRB = (0<<ACME)|(0<<ADTS2)|(0<<ADTS1)|(0<<ADTS0);
 	DIDR0 = (0<<ADC5D)|(1<<ADC4D)|(0<<ADC3D)|(0<<ADC1D)|(0<<ADC0D);
-  d6:	80 e1       	ldi	r24, 0x10	; 16
-  d8:	80 93 7e 00 	sts	0x007E, r24
-  dc:	08 95       	ret
+  b6:	80 e1       	ldi	r24, 0x10	; 16
+  b8:	80 93 7e 00 	sts	0x007E, r24
+  bc:	08 95       	ret
 
-000000de <init_pwm>:
+000000be <init_pwm>:
 }
 
 void init_pwm(void){
 	TCCR2A = (0<<COM2A1)|(1<<COM2A0)|(0<<COM2B1)|(0<<COM2B0)|(0<<WGM21)|(1<<WGM20);
-  de:	81 e4       	ldi	r24, 0x41	; 65
-  e0:	80 93 b0 00 	sts	0x00B0, r24
+  be:	81 e4       	ldi	r24, 0x41	; 65
+  c0:	80 93 b0 00 	sts	0x00B0, r24
 	TCCR2B = (0<<FOC2A)|(0<<FOC2B)|(1<<WGM22)|(1<<CS22)|(1<<CS21)|(1<<CS20);
-  e4:	8f e0       	ldi	r24, 0x0F	; 15
-  e6:	80 93 b1 00 	sts	0x00B1, r24
+  c4:	8f e0       	ldi	r24, 0x0F	; 15
+  c6:	80 93 b1 00 	sts	0x00B1, r24
 	TIMSK2 = (0<<OCIE2B)|(1<<OCIE2A)|(1<<TOIE2);
-  ea:	83 e0       	ldi	r24, 0x03	; 3
-  ec:	80 93 70 00 	sts	0x0070, r24
+  ca:	83 e0       	ldi	r24, 0x03	; 3
+  cc:	80 93 70 00 	sts	0x0070, r24
 	TIFR2 = (0<<OCF2B)|(1<<OCF2A)|(1<<TOV2);
-  f0:	87 bb       	out	0x17, r24	; 23
+  d0:	87 bb       	out	0x17, r24	; 23
 	ASSR = (1<<EXCLK)|(1<<AS2);//|(0<<TCN2UB)|(0<<OCR2AUB)|(0<<OCR2BUB)|(0<<TCR2AUB)(0<<TCR2BUB);
-  f2:	80 e6       	ldi	r24, 0x60	; 96
-  f4:	80 93 b6 00 	sts	0x00B6, r24
-  f8:	08 95       	ret
+  d2:	80 e6       	ldi	r24, 0x60	; 96
+  d4:	80 93 b6 00 	sts	0x00B6, r24
+  d8:	08 95       	ret
 
-000000fa <init_I_O>:
+000000da <init_I_O>:
 	//OCR2A = 0;
 	
 }
 
 void init_I_O(void){
 	PORTB=(0<<PORTB0)|(0<<PORTB1)|(0<<PORTB2)|(1<<PORTB3)|(0<<PORTB4)|(0<<PORTB5);
-  fa:	88 e0       	ldi	r24, 0x08	; 8
-  fc:	85 b9       	out	0x05, r24	; 5
+  da:	88 e0       	ldi	r24, 0x08	; 8
+  dc:	85 b9       	out	0x05, r24	; 5
 	DDRB= (0<<DDB0)|(0<<DDB1)|(1<<DDB2)|(1<<DDB3)|(0<<DDB4)|(0<<DDB5);
-  fe:	8c e0       	ldi	r24, 0x0C	; 12
- 100:	84 b9       	out	0x04, r24	; 4
- 102:	08 95       	ret
+  de:	8c e0       	ldi	r24, 0x0C	; 12
+  e0:	84 b9       	out	0x04, r24	; 4
+  e2:	08 95       	ret
 
-00000104 <USART_Init>:
+000000e4 <USART_Init>:
 //инициализация апаратного USART
 //настраивам регистры
 void USART_Init(unsigned int UBRR)
 {
 	//Set baud rate
 	UBRR0H = (unsigned char)(UBRR>>8);
- 104:	90 93 c5 00 	sts	0x00C5, r25
+  e4:	90 93 c5 00 	sts	0x00C5, r25
 	UBRR0L = (unsigned char)UBRR;
- 108:	80 93 c4 00 	sts	0x00C4, r24
+  e8:	80 93 c4 00 	sts	0x00C4, r24
 	UCSR0A = (0<<RXC0)|(0<<TXC0)|(1<<UDRE0)|(0<<FE0)|(0<<DOR0)|(0<<UPE0)|(0<<U2X0)|(0<<MPCM0);
- 10c:	80 e2       	ldi	r24, 0x20	; 32
- 10e:	80 93 c0 00 	sts	0x00C0, r24
+  ec:	80 e2       	ldi	r24, 0x20	; 32
+  ee:	80 93 c0 00 	sts	0x00C0, r24
 	//Enable receiver and transmitter
 	UCSR0B=(0<<RXCIE0)|(1<<TXCIE0)|(0<<UDRIE0)|(1<<RXEN0)|(1<<TXEN0)|(0<<UCSZ02)|(0<<RXB80)|(0<<TXB80);
- 112:	88 e5       	ldi	r24, 0x58	; 88
- 114:	80 93 c1 00 	sts	0x00C1, r24
+  f2:	88 e5       	ldi	r24, 0x58	; 88
+  f4:	80 93 c1 00 	sts	0x00C1, r24
 	// Set frame format: 8data, 2stop bit
 	UCSR0C=(0<<UMSEL01)|(0<<UMSEL00)|(0<<UPM01)|(0<<UPM00)|(0<<USBS0)|(1<<UCSZ01)|(1<<UCSZ00)|(0<<UCPOL0);
- 118:	86 e0       	ldi	r24, 0x06	; 6
- 11a:	80 93 c2 00 	sts	0x00C2, r24
- 11e:	08 95       	ret
+  f8:	86 e0       	ldi	r24, 0x06	; 6
+  fa:	80 93 c2 00 	sts	0x00C2, r24
+  fe:	08 95       	ret
 
-00000120 <__vector_16>:
+00000100 <__vector_16>:
 }
 
 ISR(TIMER0_OVF_vect){
- 120:	1f 92       	push	r1
- 122:	0f 92       	push	r0
- 124:	0f b6       	in	r0, 0x3f	; 63
- 126:	0f 92       	push	r0
- 128:	11 24       	eor	r1, r1
+ 100:	1f 92       	push	r1
+ 102:	0f 92       	push	r0
+ 104:	0f b6       	in	r0, 0x3f	; 63
+ 106:	0f 92       	push	r0
+ 108:	11 24       	eor	r1, r1
 	
 }
- 12a:	0f 90       	pop	r0
- 12c:	0f be       	out	0x3f, r0	; 63
- 12e:	0f 90       	pop	r0
- 130:	1f 90       	pop	r1
- 132:	18 95       	reti
+ 10a:	0f 90       	pop	r0
+ 10c:	0f be       	out	0x3f, r0	; 63
+ 10e:	0f 90       	pop	r0
+ 110:	1f 90       	pop	r1
+ 112:	18 95       	reti
 
-00000134 <__vector_21>:
+00000114 <__vector_21>:
 
 ISR(ADC_vect){
- 134:	1f 92       	push	r1
- 136:	0f 92       	push	r0
- 138:	0f b6       	in	r0, 0x3f	; 63
- 13a:	0f 92       	push	r0
- 13c:	11 24       	eor	r1, r1
+ 114:	1f 92       	push	r1
+ 116:	0f 92       	push	r0
+ 118:	0f b6       	in	r0, 0x3f	; 63
+ 11a:	0f 92       	push	r0
+ 11c:	11 24       	eor	r1, r1
 	// обрабатывать по двум АЦП вперед/назад, влево/вправо
 }
- 13e:	0f 90       	pop	r0
- 140:	0f be       	out	0x3f, r0	; 63
- 142:	0f 90       	pop	r0
- 144:	1f 90       	pop	r1
- 146:	18 95       	reti
+ 11e:	0f 90       	pop	r0
+ 120:	0f be       	out	0x3f, r0	; 63
+ 122:	0f 90       	pop	r0
+ 124:	1f 90       	pop	r1
+ 126:	18 95       	reti
 
-00000148 <main>:
+00000128 <main>:
 
 int main(void)
 {
 	init_I_O();
- 148:	0e 94 7d 00 	call	0xfa	; 0xfa <init_I_O>
+ 128:	0e 94 6d 00 	call	0xda	; 0xda <init_I_O>
 	init_pwm();
- 14c:	0e 94 6f 00 	call	0xde	; 0xde <init_pwm>
+ 12c:	0e 94 5f 00 	call	0xbe	; 0xbe <init_pwm>
 	init_ADC();
- 150:	0e 94 65 00 	call	0xca	; 0xca <init_ADC>
+ 130:	0e 94 55 00 	call	0xaa	; 0xaa <init_ADC>
 	USART_Init(MYUBRR);
- 154:	87 e6       	ldi	r24, 0x67	; 103
- 156:	90 e0       	ldi	r25, 0x00	; 0
- 158:	0e 94 82 00 	call	0x104	; 0x104 <USART_Init>
+ 134:	87 e6       	ldi	r24, 0x67	; 103
+ 136:	90 e0       	ldi	r25, 0x00	; 0
+ 138:	0e 94 72 00 	call	0xe4	; 0xe4 <USART_Init>
 	sei(); 
- 15c:	78 94       	sei
+ 13c:	78 94       	sei
 	unsigned char asd1;
 	
     while(1)
     {
         
 		asd1 = F_buffer_read(outbound_processing.word);
- 15e:	80 91 0a 01 	lds	r24, 0x010A
- 162:	0e 94 48 00 	call	0x90	; 0x90 <F_buffer_read>
-		interupt_processing();
- 166:	0e 94 5f 00 	call	0xbe	; 0xbe <interupt_processing>
- 16a:	f9 cf       	rjmp	.-14     	; 0x15e <main+0x16>
+ 13e:	80 91 09 01 	lds	r24, 0x0109
+ 142:	0e 94 49 00 	call	0x92	; 0x92 <F_buffer_read>
+		//interupt_processing();
+		
+		//Finit state machine
+		FSM_ADC();
+ 146:	0e 94 48 00 	call	0x90	; 0x90 <FSM_ADC>
+ 14a:	f9 cf       	rjmp	.-14     	; 0x13e <main+0x16>
 
-0000016c <_exit>:
- 16c:	f8 94       	cli
+0000014c <_exit>:
+ 14c:	f8 94       	cli
 
-0000016e <__stop_program>:
- 16e:	ff cf       	rjmp	.-2      	; 0x16e <__stop_program>
+0000014e <__stop_program>:
+ 14e:	ff cf       	rjmp	.-2      	; 0x14e <__stop_program>

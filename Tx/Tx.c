@@ -157,7 +157,11 @@ int main(void)
     {
         
 		asd1 = F_buffer_read(outbound_processing.word);
-		interupt_processing();
-			
+		//interupt_processing();
+		
+		//Finit state machine
+		FSM_ADC();
+		
+		
     }
 }

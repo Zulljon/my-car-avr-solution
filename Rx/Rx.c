@@ -7,10 +7,10 @@
 
 //E:\Micro_Cirquit\projects\avr
 //#include "E:\Micro_Cirquit\projects\avr\MY CAR (bt+avr+pc)\MY CAR (avr solution)\defines.h"
+//#include "E:\Micro_Cirquit\projects\avr\MY CAR (bt+avr+pc)\MY CAR (avr solution)\uart_functions.c"
+
 
 #include "Rx.h"
-
-//#include "E:\Micro_Cirquit\projects\avr\MY CAR (bt+avr+pc)\MY CAR (avr solution)\uart_functions.c"
 
 
 struct {

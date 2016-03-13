@@ -96,6 +96,12 @@
     </ToolchainSettings>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="FSM_ADC.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="FSM_ADC.h">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="Tx.h">
       <SubType>compile</SubType>
     </Compile>
