@@ -66,6 +66,14 @@ volatile union {
 		unsigned char on_off:1;
 		unsigned char assignation:3;
 	} front_leds;
+	
+	//--------------подсветка---------
+	struct {
+		unsigned char pwm			:4; // ШИМ равен 0b0000 выключить порты 1 или 0
+		unsigned char color			:1; //выбор цвета для установки ШИМ, 1-зел 0-син.
+		unsigned char assignation	:3;
+	} motor;
+	
 	// задние огни, поворотники, подсветка снизу
 	struct {
 		unsigned char blue:1;
@@ -207,7 +215,7 @@ unsigned char processing( unsigned char resive_word ){
 		case MOTORchik:
 		if (inbound_processing.motor.speed == 0){
 			TCCR0A |= (1<<COM0B1)|(1<<COM0B0);	// отключаю ногу OC0B
-			// подаю комбинацию стопа на драйвер двигателя ВЫБРАТЬ КАКУЮ НИБУДЬ НОЖКУ!!!
+			//PORTD |= 1<<PORTD2;// подаю комбинацию стопа на драйвер двигателя ВЫБРАТЬ КАКУЮ НИБУДЬ НОЖКУ!!!
 			} 
 		else {
 			pwm_speed = PWM_speed_math(inbound_processing.motor.speed);			//	записать в ШИМ одну из ... скоростей!!!
@@ -234,7 +242,7 @@ unsigned char processing( unsigned char resive_word ){
 			headlights.on_off	=	inbound_processing.front_leds.on_off; // включаем фары
 			headlights.brightness = inbound_processing.front_leds.p_w_m; 
 			// установка яркости ФАР
-			// настроить таймер2
+			// настроить таймер1
 			//и переcчитать туды inbound_processing.front_leds.p_w_m
 			init_variables_state.leds = 0x1;
 		break;
@@ -285,7 +293,6 @@ void LEDs_manipulations(void){
 		if (LED.back_red)		{	PORTB |= 1<<PORTB3 ;	}	else { PORTB &= ~(1<<PORTB3); }
 		if (LED.parking_lights_left)	{	PORTB |= 1<<PORTB4 ;	}	else { PORTB &= ~(1<<PORTB4); }
 		if (LED.parking_lights_right)		{	PORTB |= 1<<PORTB3 ; 	}	else { PORTB &= ~(1<<PORTB5); }
-		//if (LED.back_right_red)		{	do_somethings(,,PORTB5);	}	else { PORTB &= ~(1<<PORTB5); }
 		if (headlights.on_off == 1)	{
 			// дернуть ногу 
 			a = (unsigned char) ((headlights.brightness/16)*255);
@@ -331,7 +338,7 @@ unsigned int made_randoms_N(){
 	return 0;
 }
 */
-/*
+
 void init_pwm_2 (void){
 	TCCR2A = (0<<COM2A1)|(0<<COM2A0)|(0<<COM2B1)|(0<<COM2B0)|(0<<WGM21)|(0<<WGM20);
 	TCCR2B = (0<<FOC2A)|(0<<FOC2B)|(0<<WGM22)|(1<<CS22)|(1<<CS21)|(1<<CS20);
@@ -339,10 +346,10 @@ void init_pwm_2 (void){
 	TIFR2 = (0<<OCF2B)|(1<<OCF2A)|(1<<TOV2);
 	ASSR = (1<<EXCLK)|(1<<AS2);|(0<<TCN2UB)|(0<<OCR2AUB)|(0<<OCR2BUB)|(0<<TCR2AUB)(0<<TCR2BUB);
 	GTCCR = (0<<TSM)|(0<<PSRASY)|(0<<PSRSYNC);
-	//OCR2A = 0;
-	
+	OCR2A = 128;
+	OCR2B = 128;
 }
-*/
+
 
 void init_pwm_1 (void){
 	TCCR1A = (1<<COM1A1)|(0<<COM1A0)|(0<<COM1B1)|(0<<COM1B0)|(1<<WGM11)|(0<<WGM10);
@@ -358,7 +365,7 @@ void init_pwm_1 (void){
 }
 
 void init_pwm_0 (void){
-	TCCR0A = (0<<COM0A1)|(0<<COM0A0)|(1<<COM0B1)|(1<<COM0B0)|(1<<WGM01)|(1<<WGM00);
+	TCCR0A = (1<<COM0A1)|(1<<COM0A0)|(1<<COM0B1)|(1<<COM0B0)|(1<<WGM01)|(1<<WGM00);
 	TCCR0B = (0<<FOC0A)|(0<<FOC0B)|(1<<WGM02)|(0<<CS02)|(1<<CS01)|(0<<CS00);
 	TIMSK0 = (0<<OCIE0B)|(0<<OCIE0A)|(0<<TOIE0);
 	//TIFR0 = (0<<OCF0B)|(0<<OCF0A)|(0<<TOV0);

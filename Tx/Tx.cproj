@@ -108,6 +108,12 @@
     <Compile Include="Tx.c">
       <SubType>compile</SubType>
     </Compile>
+    <Compile Include="uart_function.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="uart_function.h">
+      <SubType>compile</SubType>
+    </Compile>
   </ItemGroup>
   <Import Project="$(AVRSTUDIO_EXE_PATH)\\Vs\\Compiler.targets" />
 </Project>

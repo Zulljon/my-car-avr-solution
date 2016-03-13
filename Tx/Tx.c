@@ -121,20 +121,6 @@ void init_I_O(void){
 	DDRB= (0<<DDB0)|(0<<DDB1)|(1<<DDB2)|(1<<DDB3)|(0<<DDB4)|(0<<DDB5);
 }
 
-//инициализация апаратного USART
-//настраивам регистры
-void USART_Init(unsigned int UBRR)
-{
-	//Set baud rate
-	UBRR0H = (unsigned char)(UBRR>>8);
-	UBRR0L = (unsigned char)UBRR;
-	UCSR0A = (0<<RXC0)|(0<<TXC0)|(1<<UDRE0)|(0<<FE0)|(0<<DOR0)|(0<<UPE0)|(0<<U2X0)|(0<<MPCM0);
-	//Enable receiver and transmitter
-	UCSR0B=(0<<RXCIE0)|(1<<TXCIE0)|(0<<UDRIE0)|(1<<RXEN0)|(1<<TXEN0)|(0<<UCSZ02)|(0<<RXB80)|(0<<TXB80);
-	// Set frame format: 8data, 2stop bit
-	UCSR0C=(0<<UMSEL01)|(0<<UMSEL00)|(0<<UPM01)|(0<<UPM00)|(0<<USBS0)|(1<<UCSZ01)|(1<<UCSZ00)|(0<<UCPOL0);
-}
-
 ISR(TIMER0_OVF_vect){
 	
 }
