@@ -17,7 +17,7 @@ struct {
 		//фары передние 60 градусов с ШИМ
 		unsigned char on_off:1;
 		//яркость фар
-		unsigned char brightness:4;
+		unsigned char brightness:5;
 		} headlights;// буфер для принятых переменных для фар
 
 	struct {
@@ -69,8 +69,8 @@ volatile union {
 	//------светодиоды------//
 	//фары
 	struct {
-		unsigned char p_w_m:4;
-		unsigned char on_off:1;
+		unsigned char p_w_m:5;
+		//unsigned char on_off:1;
 		unsigned char assignation:3;
 	} headlight;
 	
@@ -112,7 +112,7 @@ volatile union {
 unsigned char pwm_speed, timer0_top_value;// переменная со скоростями двигателя (для ШИМа)
 int servo_turn;
 float leftmost,rightmost;
-unsigned char a;
+unsigned int a;
 /*
 #define N_OF_TIKS 7
 char n=0;
@@ -243,8 +243,12 @@ unsigned char processing( unsigned char resive_word ){
 		break;
 		
 		case LED_HEADLIGHTS:
-			LED.headlights.on_off	=	inbound_processing.headlight.on_off; // включаем фары
-			LED.headlights.brightness = inbound_processing.headlight.p_w_m; 
+			if (inbound_processing.headlight.p_w_m == 0b00000){
+				LED.headlights.on_off = 0b0;
+				}else{
+				LED.headlights.on_off	=	0b1; // включаем фары
+				LED.headlights.brightness = inbound_processing.headlight.p_w_m; 
+			}
 			// установка яркости ФАР
 			// настроить таймер1 OC1B
 			//и переcчитать туды inbound_processing.front_leds.p_w_m
@@ -323,14 +327,16 @@ void LEDs_manipulations(void){
 			
 		if (LED.parking_lights.on_off)	{	P_PARKING_LIGHT_1 ;	}	else { P_PARKING_LIGHT_0; }
 			
-		if (LED.headlights.on_off == 1)	{
+		if (LED.headlights.on_off)	{
 			// дёрнуть ногу 
-			a = (unsigned char) ((LED.headlights.brightness/16)*255);
-			// записать переменную а в таймер1 	
-			//OCR1BH
-			//OCR1BL
+			//a = (unsigned int) ((LED.headlights.brightness/32)*65536);
+			a = (unsigned int) (LED.headlights.brightness*2048);
+			// записываем переменную а в таймер1 	
+			OCR1BH = (unsigned char)(a>>8);
+			OCR1BL = (unsigned char)a;
 		}else{
-			a = 120;//joke :)
+			OCR1BH = (unsigned char)(3>>8);
+			OCR1BL = (unsigned char)3;
 		}
 		
 				
@@ -387,7 +393,7 @@ void init_pwm_1 (void){
 	TCCR1A = (1<<COM1A1)|(0<<COM1A0)|(0<<COM1B1)|(0<<COM1B0)|(1<<WGM11)|(0<<WGM10);
 	TCCR1B = (0<<ICNC1)|(0<<ICES1)|(1<<WGM13)|(1<<WGM12)|(0<<CS12)|(1<<CS11)|(0<<CS10);
 	TCCR1C = (0<<FOC1A)|(0<<FOC1B);
-	TIMSK1 = (0<<ICIE1)|(0<<OCIE1B)|(0<<OCIE1A)|(1<<TOIE1);
+	TIMSK1 = (0<<ICIE1)|(0<<OCIE1B)|(0<<OCIE1A)|(0<<TOIE1);
 	TIFR1 = (0<<ICF1)|(0<<OCF1B)|(0<<OCF1A)|(0<<TOV1);
 	//TCNT1H and TCNT1L and OCR1AH and OCR1AL and OCR1BH and OCR1BL and ICR1H and ICR1L
 	OCR1AH = (unsigned char)(3000>>8);	// начальное значение
@@ -412,7 +418,7 @@ ISR(USART_RX_vect){
 	processing(UDR0);
 }
 
-ISR(TIMER1_OVF_vect){
+ISR(TIMER1_OVF_vect){ //TOIE1
 	//counter_on_TCNT1();
 	//contact_bounce(PORTB,PORTB5);
 	//made_randoms_N();
