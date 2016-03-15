@@ -74,7 +74,7 @@ volatile union {
 		unsigned char assignation:3;
 	} headlight;
 	
-	//--------------подсветка---------
+	//-подсветка--
 	struct {
 		unsigned char pwm			:4; // ШИМ равен 0b0000 выключить порты 1 или 0
 		unsigned char color			:1; //выбор цвета для установки ШИМ, 1-зел 0-син.
@@ -430,10 +430,10 @@ void init_I_O (void){
 	/*
 	PORTC=(0<<PORTC0)|(0<<PORTC0)|(0<<PORTC2)|(0<<PORTC3)|(0<<PORTC4)|(0<<PORTC5);
 	DDRC= (0<<DDC0)|(0<<DDC0)|(0<<DDC2)|(0<<DDC3)|(0<<DDC4)|(0<<DDC5);
-	
-	PORTD=(0<<PORTD0)|(0<<PORTD0)|(0<<PORTD2)|(0<<PORTD3)|(0<<PORTD4)|(0<<PORTD5);
-	DDRD= (0<<DDD0)|(0<<DDD0)|(0<<DDD2)|(0<<DDD3)|(0<<DDD4)|(0<<DDD5);
 	*/
+	PORTD=(0<<PORTD0)|(0<<PORTD0)|(0<<PORTD2)|(0<<PORTD3)|(0<<PORTD4)|(0<<PORTD5);
+	DDRD= (0<<DDD0)|(0<<DDD0)|(0<<DDD2)|(0<<DDD3)|(1<<DDD4)|(0<<DDD5);
+	
 }
 
 int main(void)
