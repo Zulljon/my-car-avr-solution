@@ -17,6 +17,7 @@
 #include <avr/io.h>
 #include <avr/interrupt.h>
 #include <util/delay.h>
+#include "stdint.h"
 
 #include "uart_function.h"
 #include "FSM_ADC.h"

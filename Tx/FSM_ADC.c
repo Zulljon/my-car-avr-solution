@@ -5,16 +5,16 @@
  *  Author: Dan
  */ 
 
-
-//unsigned char fsm_adc_state;							// состояние КА
-unsigned char adc_buffer_result[ADC_used_channels];		// выходной массив результатов ацп
+#include "FSM_ADC.h"
+//uint8_t fsm_adc_state;							// состояние КА
+uint8_t adc_buffer_result[ADC_used_channels];		// выходной массив результатов ацп
 static struct  {
-	unsigned char ON:1;
-	unsigned char state:5;		// состояние КА
-	unsigned char current_channel:3;
+	uint8_t ON:1;
+	uint8_t state:5;		// состояние КА
+	uint8_t current_channel:3;
 }_adc;
 //static ADC_state state =
-//unsigned char adc_channel_proccesing;
+//uint8_t adc_channel_proccesing;
 
 void FSM_ADC(void){
 	
@@ -26,7 +26,7 @@ void FSM_ADC(void){
 				}
 		break;
 		case ADC_START :
-			ADSC
+			ADSC;
 		//запускаем оцифровку канала
 		break;
 		case ADC_WAIT :

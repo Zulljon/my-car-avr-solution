@@ -13,79 +13,80 @@
 #include <avr/interrupt.h>
 #include <util/delay.h>
 */
-#include "E:\Micro_Cirquit\projects\avr\MY CAR (bt+avr+pc)\MY CAR (avr solution)\uart_functions.c"
+//#include "E:\Micro_Cirquit\projects\avr\MY CAR (bt+avr+pc)\MY CAR (avr solution)\uart_functions.c"
 
 volatile union {
 	//байтовая переменная
-	unsigned char word;
+	uint8_t word;
 	
 	//------сeрвопривод------//
 	struct {
-		unsigned char angle:5;
-		//unsigned char turn_side:1;
-		//unsigned char needs_turn:1;
-		unsigned char assignation:3;
+		uint8_t angle:5;
+		//uint8_t turn_side:1;
+		//uint8_t needs_turn:1;
+		uint8_t assignation:3;
 	} servo;
 	
 	//------двигатель------//
 	struct {
-		unsigned char speed			:4;
-		unsigned char spin_rotation	:1;
-		unsigned char assignation	:3;
+		uint8_t speed			:4;
+		uint8_t spin_rotation	:1;
+		uint8_t assignation	:3;
 	} motor;
 	
 	//------светодиоды------//
 	//фары
 	struct {
-		unsigned char p_w_m:4;
-		unsigned char on_off:1;
-		unsigned char assignation:3;
+		uint8_t p_w_m:4;
+		uint8_t on_off:1;
+		uint8_t assignation:3;
 	} front_leds;
 	// задние огни, поворотники, подсветка снизу
 	struct {
-		unsigned char blue:1;
-		unsigned char red:1;
-		unsigned char parking_lights_right:1;
-		unsigned char parking_lights_left:1;
-		unsigned char neon_light:1;
-		unsigned char assignation:3;
+		uint8_t blue:1;
+		uint8_t red:1;
+		uint8_t parking_lights_right:1;
+		uint8_t parking_lights_left:1;
+		uint8_t neon_light:1;
+		uint8_t assignation:3;
 	} back_leds;
 	
 	//установка частоты шима двигателя
 	struct {
-		unsigned char top_value:3;
-		unsigned char prescaller:2;
-		unsigned char assignation:3;
+		uint8_t top_value:3;
+		uint8_t prescaller:2;
+		uint8_t assignation:3;
 	} motor_freq;
 	
 	// установка крайнего левого/правого положения серво
 	struct {
-		unsigned char values:5;
-		unsigned char assignation:3;
+		uint8_t values:5;
+		uint8_t assignation:3;
 	} set_servo__left;
 	
 	struct {
-		unsigned char values:5;
-		unsigned char assignation:3;
+		uint8_t values:5;
+		uint8_t assignation:3;
 	} set_servo__right;
 	
 } outbound_processing ;
 
-unsigned char		buffer[BUFFER_MAX];
-unsigned char		buffer_read=0,
+uint8_t		buffer[BUFFER_MAX];
+uint8_t		buffer_read=0,
 			buffer_write=0;
 
-char F_buffer_read(char n){		// юзаем в вечном цикле, читаем и пихаем в уарт/радиомодуль
-	unsigned char word;
+uint8_t F_buffer_read(uint8_t n){		// юзаем в вечном цикле, читаем и пихаем в уарт/радиомодуль
+	uint8_t word;
 	if (n == BUFFER_MAX){
 	buffer_read = 0;}				// добавить флаг надобности чтения из буфера с установкой из функции записи
 	else {
 		word = buffer[n];
-	++n;}
-	return buffer[n];
+		++n;}
+	return word;
+	//return buffer[n];
 }
 
-char F_buffer_write(char n, char word){
+void F_buffer_write(uint8_t n, uint8_t word){
 	if (n == BUFFER_MAX){
 		buffer_write = 0;}
 	else {
@@ -93,7 +94,7 @@ char F_buffer_write(char n, char word){
 		++n;}
 }
 
-char interupt_processing(){
+void interupt_processing(){
 	//выключить интерапты
 	F_buffer_write(buffer_write,UDRE0);
 	//включить интерапты
@@ -137,7 +138,7 @@ int main(void)
 	USART_Init(MYUBRR);
 	sei(); 
 	
-	unsigned char asd1;
+	uint8_t asd1;
 	
     while(1)
     {

@@ -16,6 +16,7 @@
 #include <avr/io.h>
 #include <avr/interrupt.h>
 #include <util/delay.h>
+#include "stdint.h"
 
 //-----options-------
 #define ADC_used_channels	2			// количество использованых каналов АЦП  1...8

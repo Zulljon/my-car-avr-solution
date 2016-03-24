@@ -38,7 +38,8 @@ SUBDIRS :=
 # Add inputs and outputs from these tool invocations to the build variables 
 C_SRCS +=  \
 ../FSM_ADC.c \
-../Tx.c
+../Tx.c \
+../uart_function.c
 
 
 PREPROCESSING_SRCS += 
@@ -49,19 +50,23 @@ ASM_SRCS +=
 
 OBJS +=  \
 FSM_ADC.o \
-Tx.o
+Tx.o \
+uart_function.o
 
 OBJS_AS_ARGS +=  \
 FSM_ADC.o \
-Tx.o
+Tx.o \
+uart_function.o
 
 C_DEPS +=  \
 FSM_ADC.d \
-Tx.d
+Tx.d \
+uart_function.d
 
 C_DEPS_AS_ARGS +=  \
 FSM_ADC.d \
-Tx.d
+Tx.d \
+uart_function.d
 
 OUTPUT_FILE_PATH +=Tx.elf
 
@@ -77,6 +82,8 @@ LINKER_SCRIPT_DEP+=
 
 
 # AVR32/GNU C Compiler
+
+
 
 
 
