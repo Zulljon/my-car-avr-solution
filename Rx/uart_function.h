@@ -15,11 +15,11 @@
 
 
 //функция передачи байта с УАРТа,
-void USART_Transmit( unsigned char dataT );
+void USART_Transmit( uint8_t dataT );
 
 // функция приема байта с УАРТа, возвращает значения байта (UDR0)
-unsigned char USART_Receive( void );
+uint8_t USART_Receive( void );
 
-void USART_Init(unsigned int UBRR);
+void USART_Init(uint16_t UBRR);
 
 #endif /* UART_FUNCTION_H_ */

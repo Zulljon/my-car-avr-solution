@@ -19,6 +19,7 @@
 #include <util/delay.h>
 #include <math.h>
 #include "uart_function.h"
+#include "stdint.h"
 
 #define BUFFER_MAX 8
 
@@ -44,11 +45,11 @@
 //---------------------------------------------//
 
 void init_variables_main(void);
-float set_servo_math(char a);
+int16_t set_servo_math(int8_t a);
 void init_variables(void);
-unsigned char PWM_speed_math(unsigned char pwm_speeeds);
-unsigned int servo_angle(unsigned char r);
-unsigned char processing( unsigned char resive_word );
+uint8_t PWM_speed_math(uint8_t pwm_speeeds);
+uint16_t servo_angle(uint8_t r);
+uint8_t processing( uint8_t resive_word );
 void LEDs_manipulations(void);
 void init_pwm_2 (void);
 void init_pwm_1 (void);
