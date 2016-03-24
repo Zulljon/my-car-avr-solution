@@ -19,11 +19,11 @@ Idx Name          Size      VMA       LMA       File off  Algn
                   CONTENTS, READONLY, DEBUGGING
   7 .debug_frame  00000124  00000000  00000000  00000f8c  2**2
                   CONTENTS, READONLY, DEBUGGING
-  8 .debug_str    00000353  00000000  00000000  000010b0  2**0
+  8 .debug_str    00000359  00000000  00000000  000010b0  2**0
                   CONTENTS, READONLY, DEBUGGING
-  9 .debug_loc    000000b7  00000000  00000000  00001403  2**0
+  9 .debug_loc    000000b7  00000000  00000000  00001409  2**0
                   CONTENTS, READONLY, DEBUGGING
- 10 .debug_ranges 00000080  00000000  00000000  000014ba  2**0
+ 10 .debug_ranges 00000080  00000000  00000000  000014c0  2**0
                   CONTENTS, READONLY, DEBUGGING
 
 Disassembly of section .text:
@@ -113,22 +113,23 @@ uint8_t		buffer_read=0,
 			buffer_write=0;
 
 uint8_t F_buffer_read(uint8_t n){		// юзаем в вечном цикле, читаем и пихаем в уарт/радиомодуль
-	uint8_t word;
+	uint8_t worda;
 	if (n == BUFFER_MAX){
   ae:	88 30       	cpi	r24, 0x08	; 8
   b0:	19 f4       	brne	.+6      	; 0xb8 <F_buffer_read+0xa>
-	buffer_read = 0;}				// добавить флаг надобности чтения из буфера с установкой из функции записи
+		buffer_read = 0;}				// добавить флаг надобности чтения из буфера с установкой из функции записи
   b2:	10 92 02 01 	sts	0x0102, r1
   b6:	05 c0       	rjmp	.+10     	; 0xc2 <F_buffer_read+0x14>
 	else {
-		word = buffer[n];
+		worda = buffer[n];
   b8:	e8 2f       	mov	r30, r24
   ba:	f0 e0       	ldi	r31, 0x00	; 0
   bc:	ed 5f       	subi	r30, 0xFD	; 253
   be:	fe 4f       	sbci	r31, 0xFE	; 254
   c0:	90 81       	ld	r25, Z
-	++n;}
-	return word;
+		++n;
+		}
+	return worda;
 	//return buffer[n];
 }
   c2:	89 2f       	mov	r24, r25

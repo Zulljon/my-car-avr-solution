@@ -76,13 +76,14 @@ uint8_t		buffer_read=0,
 			buffer_write=0;
 
 uint8_t F_buffer_read(uint8_t n){		// юзаем в вечном цикле, читаем и пихаем в уарт/радиомодуль
-	uint8_t word;
+	uint8_t worda;
 	if (n == BUFFER_MAX){
-	buffer_read = 0;}				// добавить флаг надобности чтения из буфера с установкой из функции записи
+		buffer_read = 0;}				// добавить флаг надобности чтения из буфера с установкой из функции записи
 	else {
-		word = buffer[n];
-		++n;}
-	return word;
+		worda = buffer[n];
+		++n;
+		}
+	return worda;
 	//return buffer[n];
 }
 
