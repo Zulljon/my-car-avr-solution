@@ -1,6 +1,5 @@
 src/
 *.map
-*.lss
 *.elf
 *.o
 *.srec
