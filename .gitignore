@@ -1,3 +1,8 @@
 src/
 makefile
 *.map
+*.lss
+*.elf
+*.o
+*.srec
+*.eep
