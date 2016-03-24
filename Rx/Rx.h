@@ -45,7 +45,7 @@
 //---------------------------------------------//
 
 void init_variables_main(void);
-int16_t set_servo_math(int8_t a);
+int32_t set_servo_math(int8_t a);
 void init_variables(void);
 uint8_t PWM_speed_math(uint8_t pwm_speeeds);
 uint16_t servo_angle(uint8_t r);

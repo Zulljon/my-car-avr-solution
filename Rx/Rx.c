@@ -9,7 +9,6 @@
 //#include "E:\Micro_Cirquit\projects\avr\MY CAR (bt+avr+pc)\MY CAR (avr solution)\defines.h"
 //#include "E:\Micro_Cirquit\projects\avr\MY CAR (bt+avr+pc)\MY CAR (avr solution)\uart_functions.c"
 
-
 #include "Rx.h"
 
 struct {
@@ -110,8 +109,8 @@ volatile union {
 
 
 uint8_t pwm_speed, timer0_top_value;// переменная со скоростями двигателя (для ШИМа)
-int servo_turn;
-int16_t leftmost,rightmost;
+int16_t servo_turn;
+int32_t leftmost,rightmost;
 uint16_t a;
 /*
 #define N_OF_TIKS 7
@@ -125,7 +124,7 @@ int8_t randoms[N_OF_TIKS];
 uint16_t	timer1_top_value,
 				servo_min_angle,
 				servo_max_angle;
-int16_t			servo_temp;			
+int32_t			servo_temp;			
 
 //-------------------------------------------------------//
 
@@ -144,9 +143,9 @@ void init_variables_main(void){
 	//OCR1AL = (uint8_t)3000;	
 }
 
-int16_t set_servo_math(int8_t a){
-	int16_t b;
-	b = (int16_t)((a/32)*0.0005);
+int32_t set_servo_math(int8_t a){
+	int32_t b;
+	b = (int32_t)((a/32)*0.0005);
 	return b;
 }
 
@@ -190,11 +189,11 @@ void init_variables(void){
 	}
 
 	if (init_variables_state.set_servo__left){
-		leftmost = (int16_t)(0.0015 - set_servo_math(inbound_processing.set_servo__left.values));
+		leftmost = (int32_t)(0.0015 - set_servo_math(inbound_processing.set_servo__left.values));
 		init_variables_state.set_servo__left = 0x0;
 	}
 	if (init_variables_state.set_servo__rigft){
-		rightmost = (int16_t)(0.0015 + set_servo_math(inbound_processing.set_servo__right.values));
+		rightmost = (int32_t)(0.0015 + set_servo_math(inbound_processing.set_servo__right.values));
 		init_variables_state.set_servo__rigft = 0x0;
 	}
 
@@ -207,7 +206,7 @@ uint8_t PWM_speed_math(uint8_t pwm_speeeds){
 }
 
 uint16_t servo_angle(uint8_t r){
-	int a = (uint16_t)(servo_min_angle + r * servo_temp);
+	int16_t a = (uint16_t)(servo_min_angle + r * servo_temp);
 	return a;
 }
 

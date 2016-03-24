@@ -1,5 +1,4 @@
 src/
-makefile
 *.map
 *.lss
 *.elf
