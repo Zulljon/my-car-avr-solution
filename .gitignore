@@ -4,3 +4,9 @@ src/
 *.o
 *.srec
 *.eep
+
+#atmel solution file
+*.atsuo
+
+#atmel project file
+*.cproj
