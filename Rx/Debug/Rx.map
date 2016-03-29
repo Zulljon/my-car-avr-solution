@@ -707,10 +707,10 @@ END GROUP
 .debug_pubnames
  *(.debug_pubnames)
 
-.debug_info     0x00000000      0x833
+.debug_info     0x00000000      0x83e
  *(.debug_info .gnu.linkonce.wi.*)
- .debug_info    0x00000000      0x74f Rx.o
- .debug_info    0x0000074f       0xe4 uart_function.o
+ .debug_info    0x00000000      0x75a Rx.o
+ .debug_info    0x0000075a       0xe4 uart_function.o
 
 .debug_abbrev   0x00000000      0x33a
  *(.debug_abbrev)
@@ -730,7 +730,7 @@ END GROUP
 .debug_str      0x00000000     0x6f28
  *(.debug_str)
  .debug_str     0x00000000     0x6eeb Rx.o
-                               0x6fc8 (size before relaxing)
+                               0x6fd0 (size before relaxing)
  .debug_str     0x00006eeb       0x3d uart_function.o
                                0x6d57 (size before relaxing)
 

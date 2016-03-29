@@ -450,13 +450,13 @@ END GROUP
  .debug_frame   0x00000024       0xbc Tx.o
  .debug_frame   0x000000e0       0x44 uart_function.o
 
-.debug_str      0x00000000      0x359
+.debug_str      0x00000000      0x353
  *(.debug_str)
  .debug_str     0x00000000      0x195 FSM_ADC.o
                                 0x1c9 (size before relaxing)
- .debug_str     0x00000195      0x187 Tx.o
-                                0x305 (size before relaxing)
- .debug_str     0x0000031c       0x3d uart_function.o
+ .debug_str     0x00000195      0x181 Tx.o
+                                0x2ff (size before relaxing)
+ .debug_str     0x00000316       0x3d uart_function.o
                                 0x1a5 (size before relaxing)
 
 .debug_loc      0x00000000       0xb7
