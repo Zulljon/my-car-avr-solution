@@ -119,6 +119,7 @@ void init_variables_main(void){
 	init_variables_state.leds = 0x0;
 	init_variables_state.set_servo_middle = 0x0;
 	servo_middle_position = 3000; //убрать и перенести в еепром
+	servo_array = 11;//убрать и перенести в еепром
 	//randoms[0] = 51;
 	
 	timer1_top_value = (uint16_t)( F_CPU / (8 * 50 ) ) ; // 8 делитель частоты F_CPU в 16 битном таймере/клоке1 , 50 требуема частота шима
@@ -185,7 +186,7 @@ uint8_t PWM_speed_math(uint8_t pwm_speeeds){
 
 uint16_t servo_angle(uint8_t r){
 	int16_t a;
-	//if (inbound_processing.servo.needs_turn){// возможна проблема с неправильной трактовкой, переставить хрень в if и else местами
+	//if (inbound_processing.servo.turn_side){// возможна проблема с неправильной трактовкой, переставить хрень в if и else местами
 	if (inbound_processing.servo.angle!=0b0000)
 	{
 			if (inbound_processing.servo.turn_side){a = (uint16_t)(servo_middle_position + r * z);}
@@ -196,12 +197,12 @@ uint16_t servo_angle(uint8_t r){
 	return a;
 	
 	}
-	
-	
-// функци€ обработки входных сообщений
+
+
+
 uint8_t processing( uint8_t resive_word ){
 	inbound_processing.word = resive_word;
-	//PORTB=(1<<PORTB5);
+	
 	switch (inbound_processing.motor.assignation){
 		case MOTORchik:
 			if (inbound_processing.motor.speed == 0){
@@ -222,8 +223,7 @@ uint8_t processing( uint8_t resive_word ){
 			OCR1AH = (uint8_t)(servo_turn>>8);//8>>servo_turn //servo_turn>>8
 			OCR1AL = (uint8_t)servo_turn;		// записываем в 16 битный Ў»ћ servo_turn  (длинну импульса в тактах)
 				
-			//USART_Transmit(servo_turn);		
-			//}
+			//USART_Transmit(servo_turn);
 
 		break;
 		
@@ -285,22 +285,7 @@ uint8_t processing( uint8_t resive_word ){
 		//break;	
 	}
 	return 0;
-}
-
-/*
-uint8_t buffer_receive;
-
-uint8_t buffer_receive[BUFFER_MAX];
-uint8_t last_word_in_buffer = 0;
-
-uint8_t buffer_RX( uint8_t a){
-	if ( last_word_in_buffer < (BUFFER_MAX-1) ){
-		++last_word_in_buffer;
-	} else {	last_word_in_buffer = 0;	}
-	buffer_receive[last_word_in_buffer] = a ;
-	return buffer_receive[last_word_in_buffer];
-}
-*/
+					}
 
 void LEDs_manipulations(void){
 uint16_t headlight_brightless;
@@ -340,38 +325,6 @@ uint16_t headlight_brightless;
 	}
 	
 }
-/*
-uint16_t user_counter_1; 
-
-struct {
-	uint8_t compare_match_1:1;
-	uint8_t compare_match_2:1;
-	uint8_t compare_match_3:1;
-} user_counter_flags ;
-
-
-uint16_t counter_on_TCNT1(){
-	++user_counter_1;//увеличеваем переменную
-	if (user_counter_1 = 255){	user_counter_1 = 0x0;	}//обнул€ем переменную при достижении максимума
-	return 0;
-}
-
-void contact_bounce( uint8_t PORTx, uint8_t port ){
-	if ( user_counter_1 == randoms[n] ){
-		PORTx ^=1<<port; //инверси€ состо€ние "ножки"
-	}
-	++n;
-	
-}
-
-uint16_t made_randoms_N(){
-	int8_t i;
-	for (i=0;i<N_OF_TIKS;++i){
-		randoms[i+1] = (uint8_t)fmod(((randoms[i]*27)+3),128);
-	}
-	return 0;
-}
-*/
 
 void init_pwm_2 (void){ //только дл€ подсветки
 	TCCR2A = (0<<COM2A1)|(0<<COM2A0)|(0<<COM2B1)|(0<<COM2B0)|(0<<WGM21)|(0<<WGM20);
