@@ -41,10 +41,8 @@ struct {
 	uint8_t top_value:3;
 	uint8_t prescaller:2;
 	uint8_t leds	:1;
-	uint8_t set_servo__left:1;
-	uint8_t set_servo__rigft:1;
+	uint8_t set_servo_middle:1;
 } init_variables_state;// установка флагов для начала расчета чего либо
-
 
 volatile union {
 	//байтовая переменная
@@ -52,8 +50,8 @@ volatile union {
 	
 	//------сeрвопривод------//
 	struct {
-		uint8_t angle:5;
-		//uint8_t turn_side:1;
+		uint8_t angle:4;
+		uint8_t turn_side:1;
 		//uint8_t needs_turn:1;
 		uint8_t assignation:3;
 	} servo;
@@ -82,7 +80,7 @@ volatile union {
 	
 	// задние огни
 	struct {
-		uint8_t :4;
+		uint8_t not_set_yet:4;
 		uint8_t on_off:1;
 		uint8_t assignation:3;
 	} parking_lights;
@@ -94,37 +92,23 @@ volatile union {
 		uint8_t assignation:3;
 		} motor_freq;
 	
-	// установка крайнего левого/правого положения серво
+	// установка центра и масштаба положения серво
 	struct {
-		uint8_t values:5;
+		uint8_t not_set_yet:2;
+		uint8_t command:2;
+		uint8_t values:1;
 		uint8_t assignation:3;
-		} set_servo__left;
-	
-	struct {
-		uint8_t values:5;
-		uint8_t assignation:3;
-		} set_servo__right;
+		} set_servo_middle;
 		
 } inbound_processing ;
 
 
-uint8_t pwm_speed, timer0_top_value;// переменная со скоростями двигателя (для ШИМа)
-int16_t servo_turn;
-int32_t leftmost,rightmost;
-uint16_t a;
-/*
-#define N_OF_TIKS 7
-int8_t n=0;
-int8_t randoms[N_OF_TIKS];
-*/
-// таймер - 16-bit Timer/Counter1 with PWM
-// делитель частоты 8
-// Fast PWM Mode
-
+uint8_t		pwm_speed, timer0_top_value;// переменная со скоростями двигателя (для ШИМа)
+int16_t		servo_turn;// переменная угла поворота
+uint8_t		servo_array; // множитель маштаба (задается отдельно командой), он же крайнее положение сервопривода
 uint16_t	timer1_top_value,
-				servo_min_angle,
-				servo_max_angle;
-int32_t			servo_temp;			
+			servo_middle_position;// центрально положение серво
+int32_t		z;// множитель для принимаемого сообщения для угла сервопривода			
 
 //-------------------------------------------------------//
 
@@ -133,33 +117,31 @@ void init_variables_main(void){
 	init_variables_state.motorr = 1;
 	init_variables_state.prescaller = 3;
 	init_variables_state.leds = 0x0;
-	init_variables_state.set_servo__left = 0x0;
-	init_variables_state.set_servo__rigft = 0x0;
-	leftmost = 0.001;
-	rightmost = 0.002;
+	init_variables_state.set_servo_middle = 0x0;
+	servo_middle_position = 3000; //убрать и перенести в еепром
 	//randoms[0] = 51;
 	
+	timer1_top_value = (uint16_t)( F_CPU / (8 * 50 ) ) ; // 8 делитель частоты F_CPU в 16 битном таймере/клоке1 , 50 требуема частота шима
+	ICR1H = (uint8_t)(timer1_top_value>>8);
+	ICR1L = (uint8_t)timer1_top_value;
+
+	//TCNT1H and TCNT1L and OCR1AH and OCR1AL and OCR1BH and OCR1BL and ICR1H and ICR1L
+	OCR1AH = (uint8_t)(servo_middle_position>>8);	// начальное значение
+	OCR1AL = (uint8_t)servo_middle_position;		// при включении
+	
+	OCR1BH = (uint8_t)(10>>8);	// начальное значение
+	OCR1BL = (uint8_t)10;		// при включении
+
 	//OCR1AH = (uint8_t)(3000>>8);
 	//OCR1AL = (uint8_t)3000;	
-}
-
-int32_t set_servo_math(int8_t a){
-	int32_t b;
-	b = (int32_t)((a/32)*0.0005);
-	return b;
 }
 
 void init_variables(void){
 	
 	if (init_variables_state.servoo){
-		timer1_top_value = (uint16_t)( F_CPU / (8 * 50 ) ) ; //8 делитель частоты F_CPU в таймере/клоке 16 битном, 50 требуема частота шима
-		ICR1H = (uint8_t)(timer1_top_value>>8);
-		ICR1L = (uint8_t)timer1_top_value;
-		servo_min_angle = (uint16_t)( (timer1_top_value * leftmost) / 0.02) ; //leftmost >= 0.001
-		servo_max_angle = (uint16_t)( (timer1_top_value * rightmost) / 0.02) ; //rightmost <= 0.002
-		servo_temp  = (servo_max_angle - servo_min_angle) / (32);
-		// временные переменные для серво привода 
-		// в будущем перенести в EEPROM кроме коефициента servo_temp
+		z  = (timer1_top_value * servo_array) / (640 * 15);
+		// временные переменные для серво привода
+		// в будущем перенести в EEPROM кроме коефициента z
 		init_variables_state.servoo = 0x0;
 		
 		//USART_Transmit(	(uint8_t)(timer1_top_value>>8)	);
@@ -187,16 +169,12 @@ void init_variables(void){
 		}
 		init_variables_state.motorr = 0x0 ;
 	}
-
-	if (init_variables_state.set_servo__left){
-		leftmost = (int32_t)(0.0015 - set_servo_math(inbound_processing.set_servo__left.values));
-		init_variables_state.set_servo__left = 0x0;
+/*
+	if (init_variables_state.set_servo_middle){
+		servo_middle_position = ;
+		init_variables_state.set_servo_middle = 0x0;
 	}
-	if (init_variables_state.set_servo__rigft){
-		rightmost = (int32_t)(0.0015 + set_servo_math(inbound_processing.set_servo__right.values));
-		init_variables_state.set_servo__rigft = 0x0;
-	}
-
+*/	
 }
 
 uint8_t PWM_speed_math(uint8_t pwm_speeeds){
@@ -206,32 +184,40 @@ uint8_t PWM_speed_math(uint8_t pwm_speeeds){
 }
 
 uint16_t servo_angle(uint8_t r){
-	int16_t a = (uint16_t)(servo_min_angle + r * servo_temp);
+	int16_t a;
+	//if (inbound_processing.servo.needs_turn){// возможна проблема с неправильной трактовкой, переставить хрень в if и else местами
+	if (inbound_processing.servo.angle!=0b0000)
+	{
+			if (inbound_processing.servo.turn_side){a = (uint16_t)(servo_middle_position + r * z);}
+			else{a = (uint16_t)(servo_middle_position - r * z);}
+	}
+	else {a=servo_middle_position;}
+	
 	return a;
-}
-
+	
+	}
+	
+	
 // функция обработки входных сообщений
 uint8_t processing( uint8_t resive_word ){
 	inbound_processing.word = resive_word;
 	//PORTB=(1<<PORTB5);
 	switch (inbound_processing.motor.assignation){
 		case MOTORchik:
-		if (inbound_processing.motor.speed == 0){
-			TCCR0A |= (1<<COM0B1)|(1<<COM0B0);	// отключаю ногу OC0B
-			//PORTD |= 1<<PORTD2;// подаю комбинацию стопа на драйвер двигателя ВЫБРАТЬ КАКУЮ НИБУДЬ НОЖКУ!!!
-			} 
-		else {
-			pwm_speed = PWM_speed_math(inbound_processing.motor.speed);			//	записать в ШИМ одну из ... скоростей!!!
-			OCR0B = pwm_speed;
-			if (inbound_processing.motor.spin_rotation){PORTB |= (1<<P_MOTOR_SIDE);} else {PORTB &= ~(1<<P_MOTOR_SIDE);} // поменять ногу в будущем!!!
-			TCCR0A |= (1<<COM0B1)|(1<<COM0B0);	// включаю ногу OC0B
-			}
-		//USART_Transmit(timer0_top_value);
+			if (inbound_processing.motor.speed == 0){
+				TCCR0A |= (1<<COM0B1)|(1<<COM0B0);	// отключаю ногу OC0B
+				//PORTD |= 1<<PORTD2;// подаю комбинацию стопа на драйвер двигателя ВЫБРАТЬ КАКУЮ НИБУДЬ НОЖКУ!!!
+			}else {
+				pwm_speed = PWM_speed_math(inbound_processing.motor.speed);			//	записать в ШИМ одну из ... скоростей!!!
+				OCR0B = pwm_speed;
+				if (inbound_processing.motor.spin_rotation){PORTB |= (1<<P_MOTOR_SIDE);} else {PORTB &= ~(1<<P_MOTOR_SIDE);} // поменять ногу в будущем!!!
+				TCCR0A |= (1<<COM0B1)|(1<<COM0B0);	// включаю ногу OC0B
+				}
+			//USART_Transmit(timer0_top_value);
 		
 		break;
 		
 		case SERVO:
-			//if (inbound_processing.servo.needs_turn){// возможна проблема с неправильной трактовкой, переставить хрень в if и else местами
 			servo_turn = servo_angle(inbound_processing.servo.angle); 
 			OCR1AH = (uint8_t)(servo_turn>>8);//8>>servo_turn //servo_turn>>8
 			OCR1AL = (uint8_t)servo_turn;		// записываем в 16 битный ШИМ servo_turn  (длинну импульса в тактах)
@@ -281,12 +267,22 @@ uint8_t processing( uint8_t resive_word ){
 			init_variables_state.motorr = 0x1;
 		break;
 		
-		case SET_SERVO_RIGHT:
-			init_variables_state.set_servo__rigft = 0x1;		
+		case SET_SERVO_MIDDLE:
+			if (inbound_processing.set_servo_middle.command != 0b00 ){
+				if (inbound_processing.set_servo_middle.command == 0b01){
+					if (inbound_processing.set_servo_middle.values){
+							servo_middle_position = servo_middle_position + 3;}
+					else	{servo_middle_position = servo_middle_position - 3;}}
+				if (inbound_processing.set_servo_middle.command == 0b10){
+					if (inbound_processing.set_servo_middle.values){
+							servo_array = servo_array + 1;}
+					else	{servo_array = servo_array - 1;}	}
+			}
+			init_variables_state.set_servo_middle = 0x1;		
 		break;
-		case SET_SERVO_LEFT:
-			init_variables_state.set_servo__left = 0x1;		
-		break;	
+		//case SET_SERVO_OPT:
+			//init_variables_state.set_servo_middle = 0x1;		
+		//break;	
 	}
 	return 0;
 }
@@ -307,6 +303,7 @@ uint8_t buffer_RX( uint8_t a){
 */
 
 void LEDs_manipulations(void){
+uint16_t headlight_brightless;
 		
 	if (init_variables_state.leds){
 		
@@ -328,11 +325,11 @@ void LEDs_manipulations(void){
 			
 		if (LED.headlights.on_off)	{
 			// дёрнуть ногу 
-			//a = (uint16_t) ((LED.headlights.brightness/32)*65536);
-			a = (uint16_t) (LED.headlights.brightness*2048);
+			// = (uint16_t) ((LED.headlights.brightness/32)*40000);
+			headlight_brightless = (uint16_t) (LED.headlights.brightness*1250);
 			// записываем переменную а в таймер1 	
-			OCR1BH = (uint8_t)(a>>8);
-			OCR1BL = (uint8_t)a;
+			OCR1BH = (uint8_t)(headlight_brightless>>8);
+			OCR1BL = (uint8_t)headlight_brightless;
 		}else{
 			OCR1BH = (uint8_t)(3>>8);
 			OCR1BL = (uint8_t)3;

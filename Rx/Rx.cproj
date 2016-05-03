@@ -195,6 +195,12 @@
     <CleanTarget>clean</CleanTarget>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="FSM_EEPROM.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="FSM_EEPROM.h">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="Rx.c">
       <SubType>compile</SubType>
     </Compile>

@@ -37,6 +37,7 @@ SUBDIRS :=
 
 # Add inputs and outputs from these tool invocations to the build variables 
 C_SRCS +=  \
+../FSM_EEPROM.c \
 ../Rx.c \
 ../uart_function.c
 
@@ -48,18 +49,22 @@ ASM_SRCS +=
 
 
 OBJS +=  \
+FSM_EEPROM.o \
 Rx.o \
 uart_function.o
 
 OBJS_AS_ARGS +=  \
+FSM_EEPROM.o \
 Rx.o \
 uart_function.o
 
 C_DEPS +=  \
+FSM_EEPROM.d \
 Rx.d \
 uart_function.d
 
 C_DEPS_AS_ARGS +=  \
+FSM_EEPROM.d \
 Rx.d \
 uart_function.d
 
@@ -77,6 +82,8 @@ LINKER_SCRIPT_DEP+=
 
 
 # AVR32/GNU C Compiler
+
+
 
 
 

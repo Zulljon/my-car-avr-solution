@@ -20,19 +20,19 @@
 #include <math.h>
 #include "stdint.h"
 #include "uart_function.h"
-
+#include "FSM_EEPROM.h"
 
 #define BUFFER_MAX 8
 
 //---------------SWITCH--------------------------//
 #define NEON					0x0
-#define SET_SERVO_RIGHT			0x1				// пока оставим для отладки в железе
+#define SET_SERVO_MIDDLE		0x1				
 #define MOTORchik				0x2
 #define LEDS_PS					0x3
 #define SERVO					0x4
 #define LED_HEADLIGHTS			0x5
 #define SET_MOTOR_FREQ			0x6
-#define SET_SERVO_LEFT			0x7				// пока оставим для отладки в железе
+#define SET_SERVO_OPT			0x7				// free comand
 //---------------------------------------------//
 
 //-------------использованые ножки МК-----------//
@@ -46,7 +46,6 @@
 //---------------------------------------------//
 
 void init_variables_main(void);
-int32_t set_servo_math(int8_t a);
 void init_variables(void);
 uint8_t PWM_speed_math(uint8_t pwm_speeeds);
 uint16_t servo_angle(uint8_t r);

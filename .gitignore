@@ -10,3 +10,4 @@ src/
 
 #atmel project file
 *.cproj
+Rx/Debug/FSM_EEPROM.d
