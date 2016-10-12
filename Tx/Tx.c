@@ -16,10 +16,10 @@
 //#include "E:\Micro_Cirquit\projects\avr\MY CAR (bt+avr+pc)\MY CAR (avr solution)\uart_functions.c"
 
 volatile union {
-	//байтовая переменная
+	//Р±Р°Р№С‚РѕРІР°СЏ РїРµСЂРµРјРµРЅРЅР°СЏ
 	uint8_t word;
 	
-	//------сeрвопривод------//
+	//------СЃeСЂРІРѕРїСЂРёРІРѕРґ------//
 	struct {
 		uint8_t angle:5;
 		//uint8_t turn_side:1;
@@ -27,21 +27,21 @@ volatile union {
 		uint8_t assignation:3;
 	} servo;
 	
-	//------двигатель------//
+	//------РґРІРёРіР°С‚РµР»СЊ------//
 	struct {
 		uint8_t speed			:4;
 		uint8_t spin_rotation	:1;
 		uint8_t assignation	:3;
 	} motor;
 	
-	//------светодиоды------//
-	//фары
+	//------СЃРІРµС‚РѕРґРёРѕРґС‹------//
+	//С„Р°СЂС‹
 	struct {
 		uint8_t p_w_m:4;
 		uint8_t on_off:1;
 		uint8_t assignation:3;
 	} front_leds;
-	// задние огни, поворотники, подсветка снизу
+	// Р·Р°РґРЅРёРµ РѕРіРЅРё, РїРѕРІРѕСЂРѕС‚РЅРёРєРё, РїРѕРґСЃРІРµС‚РєР° СЃРЅРёР·Сѓ
 	struct {
 		uint8_t blue:1;
 		uint8_t red:1;
@@ -51,14 +51,14 @@ volatile union {
 		uint8_t assignation:3;
 	} back_leds;
 	
-	//установка частоты шима двигателя
+	//СѓСЃС‚Р°РЅРѕРІРєР° С‡Р°СЃС‚РѕС‚С‹ С€РёРјР° РґРІРёРіР°С‚РµР»СЏ
 	struct {
 		uint8_t top_value:3;
 		uint8_t prescaller:2;
 		uint8_t assignation:3;
 	} motor_freq;
 	
-	// установка крайнего левого/правого положения серво
+	// СѓСЃС‚Р°РЅРѕРІРєР° РєСЂР°Р№РЅРµРіРѕ Р»РµРІРѕРіРѕ/РїСЂР°РІРѕРіРѕ РїРѕР»РѕР¶РµРЅРёСЏ СЃРµСЂРІРѕ
 	struct {
 		uint8_t values:5;
 		uint8_t assignation:3;
@@ -75,10 +75,10 @@ uint8_t		buffer[BUFFER_MAX];
 uint8_t		buffer_read=0,
 			buffer_write=0;
 
-uint8_t F_buffer_read(uint8_t n){		// юзаем в вечном цикле, читаем и пихаем в уарт/радиомодуль
+uint8_t F_buffer_read(uint8_t n){		// СЋР·Р°РµРј РІ РІРµС‡РЅРѕРј С†РёРєР»Рµ, С‡РёС‚Р°РµРј Рё РїРёС…Р°РµРј РІ СѓР°СЂС‚/СЂР°РґРёРѕРјРѕРґСѓР»СЊ
 	uint8_t word;
 	if (n == BUFFER_MAX){
-		buffer_read = 0;}				// добавить флаг надобности чтения из буфера с установкой из функции записи
+		buffer_read = 0;}				// РґРѕР±Р°РІРёС‚СЊ С„Р»Р°Рі РЅР°РґРѕР±РЅРѕСЃС‚Рё С‡С‚РµРЅРёСЏ РёР· Р±СѓС„РµСЂР° СЃ СѓСЃС‚Р°РЅРѕРІРєРѕР№ РёР· С„СѓРЅРєС†РёРё Р·Р°РїРёСЃРё
 	else {
 		word = buffer[n];
 		++n;
@@ -96,9 +96,9 @@ void F_buffer_write(uint8_t n, uint8_t word){
 }
 
 void interupt_processing(){
-	//выключить интерапты
+	//РІС‹РєР»СЋС‡РёС‚СЊ РёРЅС‚РµСЂР°РїС‚С‹
 	F_buffer_write(buffer_write,UDRE0);
-	//включить интерапты
+	//РІРєР»СЋС‡РёС‚СЊ РёРЅС‚РµСЂР°РїС‚С‹
 }
 
 void init_ADC(void){
@@ -128,7 +128,7 @@ ISR(TIMER0_OVF_vect){
 }
 
 ISR(ADC_vect){
-	// обрабатывать по двум АЦП вперед/назад, влево/вправо
+	// РѕР±СЂР°Р±Р°С‚С‹РІР°С‚СЊ РїРѕ РґРІСѓРј РђР¦Рџ РІРїРµСЂРµРґ/РЅР°Р·Р°Рґ, РІР»РµРІРѕ/РІРїСЂР°РІРѕ
 }
 
 int main(void)

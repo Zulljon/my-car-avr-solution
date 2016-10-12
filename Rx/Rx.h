@@ -35,13 +35,13 @@
 #define SET_SERVO_OPT			0x7				// free comand
 //---------------------------------------------//
 
-//-------------использованые ножки МК-----------//
+//-------------РёСЃРїРѕР»СЊР·РѕРІР°РЅС‹Рµ РЅРѕР¶РєРё РњРљ-----------//
 #define P_MOTOR_SIDE			PORTB0
-#define P_NEON_GREEN			// на таймере2 А OC2A
-#define P_NEON_BLUE				// на таймере2 В OC2B
+#define P_NEON_GREEN			// РЅР° С‚Р°Р№РјРµСЂРµ2 Рђ OC2A
+#define P_NEON_BLUE				// РЅР° С‚Р°Р№РјРµСЂРµ2 Р’ OC2B
 #define P_PARKING_LIGHT_1		PORTD|=1<<PORTD4
 #define P_PARKING_LIGHT_0		PORTD&=~(1<<PORTD4)
-#define P_HEADLIGHTS			//передние фары на 16 битном таймере В
+#define P_HEADLIGHTS			//РїРµСЂРµРґРЅРёРµ С„Р°СЂС‹ РЅР° 16 Р±РёС‚РЅРѕРј С‚Р°Р№РјРµСЂРµ Р’
 
 //---------------------------------------------//
 

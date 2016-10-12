@@ -6,11 +6,11 @@
  */ 
 
 #include "FSM_ADC.h"
-//uint8_t fsm_adc_state;							// состояние КА
-uint8_t adc_buffer_result[ADC_used_channels];		// выходной массив результатов ацп
+//uint8_t fsm_adc_state;							// СЃРѕСЃС‚РѕСЏРЅРёРµ РљРђ
+uint8_t adc_buffer_result[ADC_used_channels];		// РІС‹С…РѕРґРЅРѕР№ РјР°СЃСЃРёРІ СЂРµР·СѓР»СЊС‚Р°С‚РѕРІ Р°С†Рї
 static struct  {
 	uint8_t ON:1;
-	uint8_t state:5;		// состояние КА
+	uint8_t state:5;		// СЃРѕСЃС‚РѕСЏРЅРёРµ РљРђ
 	uint8_t current_channel:3;
 }_adc;
 //static ADC_state state =
@@ -19,7 +19,7 @@ static struct  {
 void FSM_ADC(void){
 	
 	switch (_adc.state){
-		case ADC_DEADTIME ://состояние простоя
+		case ADC_DEADTIME ://СЃРѕСЃС‚РѕСЏРЅРёРµ РїСЂРѕСЃС‚РѕСЏ
 			if (!_adc.ON){		break;		} 
 			else{
 				_adc.state = ADC_START;
@@ -27,13 +27,13 @@ void FSM_ADC(void){
 		break;
 		case ADC_START :
 			ADSC;
-		//запускаем оцифровку канала
+		//Р·Р°РїСѓСЃРєР°РµРј РѕС†РёС„СЂРѕРІРєСѓ РєР°РЅР°Р»Р°
 		break;
 		case ADC_WAIT :
-		//ждем окончания оцифровки и идем в ADC_END
+		//Р¶РґРµРј РѕРєРѕРЅС‡Р°РЅРёСЏ РѕС†РёС„СЂРѕРІРєРё Рё РёРґРµРј РІ ADC_END
 		break;
 		case ADC_END :
-		//пишем в выход результат, возвращаемся в ADC_START
+		//РїРёС€РµРј РІ РІС‹С…РѕРґ СЂРµР·СѓР»СЊС‚Р°С‚, РІРѕР·РІСЂР°С‰Р°РµРјСЃСЏ РІ ADC_START
 		break;
 		case 4 :
 		break;

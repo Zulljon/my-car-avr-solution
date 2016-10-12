@@ -13,27 +13,27 @@
 
 struct {
 	struct {
-		//фары передние 60 градусов с ШИМ
+		//С„Р°СЂС‹ РїРµСЂРµРґРЅРёРµ 60 РіСЂР°РґСѓСЃРѕРІ СЃ РЁРРњ
 		uint8_t on_off:1;
-		//яркость фар
+		//СЏСЂРєРѕСЃС‚СЊ С„Р°СЂ
 		uint8_t brightness:5;
-		} headlights;// буфер для принятых переменных для фар
+		} headlights;// Р±СѓС„РµСЂ РґР»СЏ РїСЂРёРЅСЏС‚С‹С… РїРµСЂРµРјРµРЅРЅС‹С… РґР»СЏ С„Р°СЂ
 
 	struct {
-		//вкл/выкл
+		//РІРєР»/РІС‹РєР»
 		uint8_t on_green:1;
 		uint8_t on_blue:1;
-		//яркость
+		//СЏСЂРєРѕСЃС‚СЊ
 		uint8_t brightness_green:4;
 		uint8_t brightness_blue:4;
-		} neon_buffer;// буфер для принятых переменных подсветки
+		} neon_buffer;// Р±СѓС„РµСЂ РґР»СЏ РїСЂРёРЅСЏС‚С‹С… РїРµСЂРµРјРµРЅРЅС‹С… РїРѕРґСЃРІРµС‚РєРё
 
 	struct {
-		//задние огни
+		//Р·Р°РґРЅРёРµ РѕРіРЅРё
 		uint8_t on_off:1;
 		}parking_lights;
 
-} LED;// буфер для принятых переменных для габаритов и поворотников
+} LED;// Р±СѓС„РµСЂ РґР»СЏ РїСЂРёРЅСЏС‚С‹С… РїРµСЂРµРјРµРЅРЅС‹С… РґР»СЏ РіР°Р±Р°СЂРёС‚РѕРІ Рё РїРѕРІРѕСЂРѕС‚РЅРёРєРѕРІ
 
 struct {
 	uint8_t servoo	:1;
@@ -42,13 +42,13 @@ struct {
 	uint8_t prescaller:2;
 	uint8_t leds	:1;
 	uint8_t set_servo_middle:1;
-} init_variables_state;// установка флагов для начала расчета чего либо
+} init_variables_state;// СѓСЃС‚Р°РЅРѕРІРєР° С„Р»Р°РіРѕРІ РґР»СЏ РЅР°С‡Р°Р»Р° СЂР°СЃС‡РµС‚Р° С‡РµРіРѕ Р»РёР±Рѕ
 
 volatile union {
-	//байтовая переменная
+	//Р±Р°Р№С‚РѕРІР°СЏ РїРµСЂРµРјРµРЅРЅР°СЏ
 	uint8_t word;
 	
-	//------сeрвопривод------//
+	//------СЃeСЂРІРѕРїСЂРёРІРѕРґ------//
 	struct {
 		uint8_t angle:4;
 		uint8_t turn_side:1;
@@ -56,43 +56,43 @@ volatile union {
 		uint8_t assignation:3;
 	} servo;
 	
-	//------двигатель------//
+	//------РґРІРёРіР°С‚РµР»СЊ------//
 	struct {
 		uint8_t speed			:4;
 		uint8_t spin_rotation	:1;
 		uint8_t assignation	:3;
 	} motor;
 	
-	//------светодиоды------//
-	//фары
+	//------СЃРІРµС‚РѕРґРёРѕРґС‹------//
+	//С„Р°СЂС‹
 	struct {
 		uint8_t p_w_m:5;
 		//uint8_t on_off:1;
 		uint8_t assignation:3;
 	} headlight;
 	
-	//-подсветка--
+	//-РїРѕРґСЃРІРµС‚РєР°--
 	struct {
-		uint8_t pwm			:4; // ШИМ равен 0b0000 выключить порты 1 или 0
-		uint8_t color			:1; //выбор цвета для установки ШИМ, 1-зел 0-син.
+		uint8_t pwm			:4; // РЁРРњ СЂР°РІРµРЅ 0b0000 РІС‹РєР»СЋС‡РёС‚СЊ РїРѕСЂС‚С‹ 1 РёР»Рё 0
+		uint8_t color			:1; //РІС‹Р±РѕСЂ С†РІРµС‚Р° РґР»СЏ СѓСЃС‚Р°РЅРѕРІРєРё РЁРРњ, 1-Р·РµР» 0-СЃРёРЅ.
 		uint8_t assignation	:3;
 	} neon;
 	
-	// задние огни
+	// Р·Р°РґРЅРёРµ РѕРіРЅРё
 	struct {
 		uint8_t not_set_yet:4;
 		uint8_t on_off:1;
 		uint8_t assignation:3;
 	} parking_lights;
 	
-	//установка частоты шима двигателя
+	//СѓСЃС‚Р°РЅРѕРІРєР° С‡Р°СЃС‚РѕС‚С‹ С€РёРјР° РґРІРёРіР°С‚РµР»СЏ
 	struct {
 		uint8_t top_value:3;
 		uint8_t prescaller:2;
 		uint8_t assignation:3;
 		} motor_freq;
 	
-	// установка центра и масштаба положения серво
+	// СѓСЃС‚Р°РЅРѕРІРєР° С†РµРЅС‚СЂР° Рё РјР°СЃС€С‚Р°Р±Р° РїРѕР»РѕР¶РµРЅРёСЏ СЃРµСЂРІРѕ
 	struct {
 		uint8_t not_set_yet:2;
 		uint8_t command:2;
@@ -103,12 +103,12 @@ volatile union {
 } inbound_processing ;
 
 
-uint8_t		pwm_speed, timer0_top_value;// переменная со скоростями двигателя (для ШИМа)
-int16_t		servo_turn;// переменная угла поворота
-uint8_t		servo_array; // множитель маштаба (задается отдельно командой), он же крайнее положение сервопривода
+uint8_t		pwm_speed, timer0_top_value;// РїРµСЂРµРјРµРЅРЅР°СЏ СЃРѕ СЃРєРѕСЂРѕСЃС‚СЏРјРё РґРІРёРіР°С‚РµР»СЏ (РґР»СЏ РЁРРњР°)
+int16_t		servo_turn;// РїРµСЂРµРјРµРЅРЅР°СЏ СѓРіР»Р° РїРѕРІРѕСЂРѕС‚Р°
+uint8_t		servo_array; // РјРЅРѕР¶РёС‚РµР»СЊ РјР°С€С‚Р°Р±Р° (Р·Р°РґР°РµС‚СЃСЏ РѕС‚РґРµР»СЊРЅРѕ РєРѕРјР°РЅРґРѕР№), РѕРЅ Р¶Рµ РєСЂР°Р№РЅРµРµ РїРѕР»РѕР¶РµРЅРёРµ СЃРµСЂРІРѕРїСЂРёРІРѕРґР°
 uint16_t	timer1_top_value,
-			servo_middle_position;// центрально положение серво
-int32_t		z;// множитель для принимаемого сообщения для угла сервопривода			
+			servo_middle_position;// С†РµРЅС‚СЂР°Р»СЊРЅРѕ РїРѕР»РѕР¶РµРЅРёРµ СЃРµСЂРІРѕ
+int32_t		z;// РјРЅРѕР¶РёС‚РµР»СЊ РґР»СЏ РїСЂРёРЅРёРјР°РµРјРѕРіРѕ СЃРѕРѕР±С‰РµРЅРёСЏ РґР»СЏ СѓРіР»Р° СЃРµСЂРІРѕРїСЂРёРІРѕРґР°			
 
 //-------------------------------------------------------//
 
@@ -118,20 +118,20 @@ void init_variables_main(void){
 	init_variables_state.prescaller = 3;
 	init_variables_state.leds = 0x0;
 	init_variables_state.set_servo_middle = 0x0;
-	servo_middle_position = 3000; //убрать и перенести в еепром
-	servo_array = 11;//убрать и перенести в еепром
+	servo_middle_position = 3000; //СѓР±СЂР°С‚СЊ Рё РїРµСЂРµРЅРµСЃС‚Рё РІ РµРµРїСЂРѕРј
+	servo_array = 11;//СѓР±СЂР°С‚СЊ Рё РїРµСЂРµРЅРµСЃС‚Рё РІ РµРµРїСЂРѕРј
 	//randoms[0] = 51;
 	
-	timer1_top_value = (uint16_t)( F_CPU / (8 * 50 ) ) ; // 8 делитель частоты F_CPU в 16 битном таймере/клоке1 , 50 требуема частота шима
+	timer1_top_value = (uint16_t)( F_CPU / (8 * 50 ) ) ; // 8 РґРµР»РёС‚РµР»СЊ С‡Р°СЃС‚РѕС‚С‹ F_CPU РІ 16 Р±РёС‚РЅРѕРј С‚Р°Р№РјРµСЂРµ/РєР»РѕРєРµ1 , 50 С‚СЂРµР±СѓРµРјР° С‡Р°СЃС‚РѕС‚Р° С€РёРјР°
 	ICR1H = (uint8_t)(timer1_top_value>>8);
 	ICR1L = (uint8_t)timer1_top_value;
 
 	//TCNT1H and TCNT1L and OCR1AH and OCR1AL and OCR1BH and OCR1BL and ICR1H and ICR1L
-	OCR1AH = (uint8_t)(servo_middle_position>>8);	// начальное значение
-	OCR1AL = (uint8_t)servo_middle_position;		// при включении
+	OCR1AH = (uint8_t)(servo_middle_position>>8);	// РЅР°С‡Р°Р»СЊРЅРѕРµ Р·РЅР°С‡РµРЅРёРµ
+	OCR1AL = (uint8_t)servo_middle_position;		// РїСЂРё РІРєР»СЋС‡РµРЅРёРё
 	
-	OCR1BH = (uint8_t)(10>>8);	// начальное значение
-	OCR1BL = (uint8_t)10;		// при включении
+	OCR1BH = (uint8_t)(10>>8);	// РЅР°С‡Р°Р»СЊРЅРѕРµ Р·РЅР°С‡РµРЅРёРµ
+	OCR1BL = (uint8_t)10;		// РїСЂРё РІРєР»СЋС‡РµРЅРёРё
 
 	//OCR1AH = (uint8_t)(3000>>8);
 	//OCR1AL = (uint8_t)3000;	
@@ -141,8 +141,8 @@ void init_variables(void){
 	
 	if (init_variables_state.servoo){
 		z  = (timer1_top_value * servo_array) / (640 * 15);
-		// временные переменные для серво привода
-		// в будущем перенести в EEPROM кроме коефициента z
+		// РІСЂРµРјРµРЅРЅС‹Рµ РїРµСЂРµРјРµРЅРЅС‹Рµ РґР»СЏ СЃРµСЂРІРѕ РїСЂРёРІРѕРґР°
+		// РІ Р±СѓРґСѓС‰РµРј РїРµСЂРµРЅРµСЃС‚Рё РІ EEPROM РєСЂРѕРјРµ РєРѕРµС„РёС†РёРµРЅС‚Р° z
 		init_variables_state.servoo = 0x0;
 		
 		//USART_Transmit(	(uint8_t)(timer1_top_value>>8)	);
@@ -153,7 +153,7 @@ void init_variables(void){
 	if (init_variables_state.motorr){
 		timer0_top_value = (uint8_t)((0xFF)*(init_variables_state.top_value/8));
 		OCR0B = timer0_top_value ;
-		// пощитали и записали верхнее значение шима для моторчика в OCR0A
+		// РїРѕС‰РёС‚Р°Р»Рё Рё Р·Р°РїРёСЃР°Р»Рё РІРµСЂС…РЅРµРµ Р·РЅР°С‡РµРЅРёРµ С€РёРјР° РґР»СЏ РјРѕС‚РѕСЂС‡РёРєР° РІ OCR0A
 		switch(init_variables_state.prescaller){
 			case 0 :	//8
 				TCCR0B = (0<<CS02)|(1<<CS01)|(0<<CS00);
@@ -186,7 +186,7 @@ uint8_t PWM_speed_math(uint8_t pwm_speeeds){
 
 uint16_t servo_angle(uint8_t r){
 	int16_t a;
-	//if (inbound_processing.servo.turn_side){// возможна проблема с неправильной трактовкой, переставить хрень в if и else местами
+	//if (inbound_processing.servo.turn_side){// РІРѕР·РјРѕР¶РЅР° РїСЂРѕР±Р»РµРјР° СЃ РЅРµРїСЂР°РІРёР»СЊРЅРѕР№ С‚СЂР°РєС‚РѕРІРєРѕР№, РїРµСЂРµСЃС‚Р°РІРёС‚СЊ С…СЂРµРЅСЊ РІ if Рё else РјРµСЃС‚Р°РјРё
 	if (inbound_processing.servo.angle!=0b0000)
 	{
 			if (inbound_processing.servo.turn_side){a = (uint16_t)(servo_middle_position + r * z);}
@@ -206,13 +206,13 @@ uint8_t processing( uint8_t resive_word ){
 	switch (inbound_processing.motor.assignation){
 		case MOTORchik:
 			if (inbound_processing.motor.speed == 0){
-				TCCR0A |= (1<<COM0B1)|(1<<COM0B0);	// отключаю ногу OC0B
-				//PORTD |= 1<<PORTD2;// подаю комбинацию стопа на драйвер двигателя ВЫБРАТЬ КАКУЮ НИБУДЬ НОЖКУ!!!
+				TCCR0A |= (1<<COM0B1)|(1<<COM0B0);	// РѕС‚РєР»СЋС‡Р°СЋ РЅРѕРіСѓ OC0B
+				//PORTD |= 1<<PORTD2;// РїРѕРґР°СЋ РєРѕРјР±РёРЅР°С†РёСЋ СЃС‚РѕРїР° РЅР° РґСЂР°Р№РІРµСЂ РґРІРёРіР°С‚РµР»СЏ Р’Р«Р‘Р РђРўР¬ РљРђРљРЈР® РќРР‘РЈР”Р¬ РќРћР–РљРЈ!!!
 			}else {
-				pwm_speed = PWM_speed_math(inbound_processing.motor.speed);			//	записать в ШИМ одну из ... скоростей!!!
+				pwm_speed = PWM_speed_math(inbound_processing.motor.speed);			//	Р·Р°РїРёСЃР°С‚СЊ РІ РЁРРњ РѕРґРЅСѓ РёР· ... СЃРєРѕСЂРѕСЃС‚РµР№!!!
 				OCR0B = pwm_speed;
-				if (inbound_processing.motor.spin_rotation){PORTB |= (1<<P_MOTOR_SIDE);} else {PORTB &= ~(1<<P_MOTOR_SIDE);} // поменять ногу в будущем!!!
-				TCCR0A |= (1<<COM0B1)|(1<<COM0B0);	// включаю ногу OC0B
+				if (inbound_processing.motor.spin_rotation){PORTB |= (1<<P_MOTOR_SIDE);} else {PORTB &= ~(1<<P_MOTOR_SIDE);} // РїРѕРјРµРЅСЏС‚СЊ РЅРѕРіСѓ РІ Р±СѓРґСѓС‰РµРј!!!
+				TCCR0A |= (1<<COM0B1)|(1<<COM0B0);	// РІРєР»СЋС‡Р°СЋ РЅРѕРіСѓ OC0B
 				}
 			//USART_Transmit(timer0_top_value);
 		
@@ -221,7 +221,7 @@ uint8_t processing( uint8_t resive_word ){
 		case SERVO:
 			servo_turn = servo_angle(inbound_processing.servo.angle); 
 			OCR1AH = (uint8_t)(servo_turn>>8);//8>>servo_turn //servo_turn>>8
-			OCR1AL = (uint8_t)servo_turn;		// записываем в 16 битный ШИМ servo_turn  (длинну импульса в тактах)
+			OCR1AL = (uint8_t)servo_turn;		// Р·Р°РїРёСЃС‹РІР°РµРј РІ 16 Р±РёС‚РЅС‹Р№ РЁРРњ servo_turn  (РґР»РёРЅРЅСѓ РёРјРїСѓР»СЊСЃР° РІ С‚Р°РєС‚Р°С…)
 				
 			//USART_Transmit(servo_turn);
 
@@ -231,12 +231,12 @@ uint8_t processing( uint8_t resive_word ){
 			if (inbound_processing.headlight.p_w_m == 0b00000){
 				LED.headlights.on_off = 0b0;
 				}else{
-				LED.headlights.on_off	=	0b1; // включаем фары
+				LED.headlights.on_off	=	0b1; // РІРєР»СЋС‡Р°РµРј С„Р°СЂС‹
 				LED.headlights.brightness = inbound_processing.headlight.p_w_m; 
 			}
-			// установка яркости ФАР
-			// настроить таймер1 OC1B
-			//и переcчитать туды inbound_processing.front_leds.p_w_m
+			// СѓСЃС‚Р°РЅРѕРІРєР° СЏСЂРєРѕСЃС‚Рё Р¤РђР 
+			// РЅР°СЃС‚СЂРѕРёС‚СЊ С‚Р°Р№РјРµСЂ1 OC1B
+			//Рё РїРµСЂРµcС‡РёС‚Р°С‚СЊ С‚СѓРґС‹ inbound_processing.front_leds.p_w_m
 			init_variables_state.leds = 0x1;
 		break;
 			
@@ -293,26 +293,26 @@ uint16_t headlight_brightless;
 	if (init_variables_state.leds){
 		
 		if (!LED.neon_buffer.on_green){
-			//отключить OC2A от таймера;	
+			//РѕС‚РєР»СЋС‡РёС‚СЊ OC2A РѕС‚ С‚Р°Р№РјРµСЂР°;	
 			}else {
-			//включить OC2A
-			//записать OC2A = LED.neon_buffer.brightness_green
+			//РІРєР»СЋС‡РёС‚СЊ OC2A
+			//Р·Р°РїРёСЃР°С‚СЊ OC2A = LED.neon_buffer.brightness_green
 			}
 			
 		if (!LED.neon_buffer.on_blue){
-			//отключить OC2B от таймера;
+			//РѕС‚РєР»СЋС‡РёС‚СЊ OC2B РѕС‚ С‚Р°Р№РјРµСЂР°;
 			}else {
-			//включить OC2B
-			//записать OC2B = LED.neon_buffer.brightness_blue
+			//РІРєР»СЋС‡РёС‚СЊ OC2B
+			//Р·Р°РїРёСЃР°С‚СЊ OC2B = LED.neon_buffer.brightness_blue
 		}
 			
 		if (LED.parking_lights.on_off)	{	P_PARKING_LIGHT_1 ;	}	else { P_PARKING_LIGHT_0; }
 			
 		if (LED.headlights.on_off)	{
-			// дёрнуть ногу 
+			// РґС‘СЂРЅСѓС‚СЊ РЅРѕРіСѓ 
 			// = (uint16_t) ((LED.headlights.brightness/32)*40000);
 			headlight_brightless = (uint16_t) (LED.headlights.brightness*1250);
-			// записываем переменную а в таймер1 	
+			// Р·Р°РїРёСЃС‹РІР°РµРј РїРµСЂРµРјРµРЅРЅСѓСЋ Р° РІ С‚Р°Р№РјРµСЂ1 	
 			OCR1BH = (uint8_t)(headlight_brightless>>8);
 			OCR1BL = (uint8_t)headlight_brightless;
 		}else{
@@ -326,7 +326,7 @@ uint16_t headlight_brightless;
 	
 }
 
-void init_pwm_2 (void){ //только для подсветки
+void init_pwm_2 (void){ //С‚РѕР»СЊРєРѕ РґР»СЏ РїРѕРґСЃРІРµС‚РєРё
 	TCCR2A = (0<<COM2A1)|(0<<COM2A0)|(0<<COM2B1)|(0<<COM2B0)|(0<<WGM21)|(0<<WGM20);
 	TCCR2B = (0<<FOC2A)|(0<<FOC2B)|(0<<WGM22)|(1<<CS22)|(1<<CS21)|(1<<CS20);
 	TIMSK2 = (0<<OCIE2B)|(0<<OCIE2A)|(0<<TOIE2);
@@ -345,10 +345,10 @@ void init_pwm_1 (void){
 	TIMSK1 = (0<<ICIE1)|(0<<OCIE1B)|(0<<OCIE1A)|(0<<TOIE1);
 	TIFR1 = (0<<ICF1)|(0<<OCF1B)|(0<<OCF1A)|(0<<TOV1);
 	//TCNT1H and TCNT1L and OCR1AH and OCR1AL and OCR1BH and OCR1BL and ICR1H and ICR1L
-	OCR1AH = (uint8_t)(3000>>8);	// начальное значение
-	OCR1AL = (uint8_t)3000;		// при включении
-	OCR1BH = (uint8_t)(10>>8);	// начальное значение
-	OCR1BL = (uint8_t)10;		// при включении
+	OCR1AH = (uint8_t)(3000>>8);	// РЅР°С‡Р°Р»СЊРЅРѕРµ Р·РЅР°С‡РµРЅРёРµ
+	OCR1AL = (uint8_t)3000;		// РїСЂРё РІРєР»СЋС‡РµРЅРёРё
+	OCR1BH = (uint8_t)(10>>8);	// РЅР°С‡Р°Р»СЊРЅРѕРµ Р·РЅР°С‡РµРЅРёРµ
+	OCR1BL = (uint8_t)10;		// РїСЂРё РІРєР»СЋС‡РµРЅРёРё
 	
 }
 

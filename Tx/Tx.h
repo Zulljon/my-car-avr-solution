@@ -28,13 +28,13 @@
 
 //---------------SWITCH_word_processing-----------//
 #define not_set_yet				0x0
-#define SET_SERVO_RIGHT			0x1				// пока оставим для отладки в железе
+#define SET_SERVO_RIGHT			0x1				// РїРѕРєР° РѕСЃС‚Р°РІРёРј РґР»СЏ РѕС‚Р»Р°РґРєРё РІ Р¶РµР»РµР·Рµ
 #define MOTORchik				0x2
 #define LEDS_B_PS				0x3
 #define SERVO					0x4
 #define LEDS_FRONT				0x5
 #define SET_MOTOR_FREQ			0x6
-#define SET_SERVO_LEFT			0x7				// пока оставим для отладки в железе
+#define SET_SERVO_LEFT			0x7				// РїРѕРєР° РѕСЃС‚Р°РІРёРј РґР»СЏ РѕС‚Р»Р°РґРєРё РІ Р¶РµР»РµР·Рµ
 //---------------------------------------------//
 
 

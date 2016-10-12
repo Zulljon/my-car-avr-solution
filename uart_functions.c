@@ -1,6 +1,6 @@
 
 
-//функция передачи байта с УАРТа, 
+//С„СѓРЅРєС†РёСЏ РїРµСЂРµРґР°С‡Рё Р±Р°Р№С‚Р° СЃ РЈРђР РўР°, 
 void USART_Transmit( unsigned char dataT ){
 	/* Wait for empty transmit buffer */
 	while ( !(UCSR0A & (1<<UDRE0)) );
@@ -8,7 +8,7 @@ void USART_Transmit( unsigned char dataT ){
 	UDR0 = dataT;
 }
 
-// функция приема байта с УАРТа, возвращает значения байта (UDR0)
+// С„СѓРЅРєС†РёСЏ РїСЂРёРµРјР° Р±Р°Р№С‚Р° СЃ РЈРђР РўР°, РІРѕР·РІСЂР°С‰Р°РµС‚ Р·РЅР°С‡РµРЅРёСЏ Р±Р°Р№С‚Р° (UDR0)
 unsigned char USART_Receive( void ){
 	/* Wait for data to be received */
 	while ( !(UCSR0A & (1<<RXC0)) );
@@ -18,8 +18,8 @@ unsigned char USART_Receive( void ){
 
 
 /*
-//инициализация апаратного USART 
-//настраивам регистры
+//РёРЅРёС†РёР°Р»РёР·Р°С†РёСЏ Р°РїР°СЂР°С‚РЅРѕРіРѕ USART 
+//РЅР°СЃС‚СЂР°РёРІР°Рј СЂРµРіРёСЃС‚СЂС‹
 void USART_Init(unsigned int UBRR)
 {
 	//Set baud rate
