@@ -1,13 +1,15 @@
 src/
-*.map
-*.elf
-*.o
-*.srec
-*.eep
+**.map
+**.elf
+**.o
+**.d
+**.srec
+**.eep
+**.lss
+**.hex
 
 #atmel solution file
 *.atsuo
 
 #atmel project file
 *.cproj
-Rx/Debug/FSM_EEPROM.d
