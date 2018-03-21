@@ -1,6 +1,6 @@
 #!/bin/bash
 
-if [[ -n 1 || "$1" == "usage" || "$1" == "help" ]]; then
+if [[ $# -eq 0 || "$1" == "usage" || "$1" == "help" ]]; then
 	echo "Usage: "
 	echo "    ./compile.sh [Rx|Tx] [make|clean]"
 	echo "    ./compile.sh [clean] [all]       "
@@ -45,4 +45,13 @@ if [[ "$1" == "Tx" ]]; then
 		cd "$ROOT_DIR/Tx/Debug"
 		make -f $MAKE_file clean
 	fi
+fi
+if [[ "$1" == "burn" ]]; then
+	if [[ -n 2 && "$2" == "rx" ]]; then
+		# arduino UNO
+		avrdude -p atmega328p -c arduino -P /dev/ttyACM0 -b 115200 -D -U flash:w:Rx/Debug/Rx.hex:i
+	elif [[ -n 2 && "$2" == "tx" && false ]]; then
+		avrdude -v -patmega328p -carduino -P/dev/ttyACM0 -b115200 -D -Uflash:w:Tx/Debug/Tx.hex:i
+	fi
+	
 fi
