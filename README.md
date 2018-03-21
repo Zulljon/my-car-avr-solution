@@ -1,15 +1,43 @@
-Описания к новому проекту пока нету.
-старый вариант выглядел так:
 
-Функция processing() обрабатывает меседж принятый по уарту, вызывается это все по интерапту конечно же.
-Если в кратце то применяем маску "назначения" (ASSIGNATION) на принятый байт и по средствам switch case обрабатываем дальше.
-В средине каждого case обрабатываем:
-	- правый мотор
-	- левый мотор
-		Налаживаем маску "STOP_START_MASK" на принятый байт, если true то смотрим в какую сторону крутить и с какой скоростью, а если false то говорим програмному шиму стопнутся
-	- задние габариты (4 шт.)
-	- передние фары (4 шт.)
-		существуют отдельные переменные отвечающие за состояние каждого из светодиодов, при обработке принятого сообщения сначала меняем состояние этих переменных, а уже потом в основном цикле дергаем ножками МК.
+# My R/C car 
+Code writen in C for avr mcu family. Also include PCB design files for manufacturing and assembly.
+## Functions
+Main functionality: 
+- Servo with PWM control to turn forward wheels.
+- DC engine with PWM control thru the H-bridge.
+- Background light, under the car, green and blue leds controled with PWM.
+- White headlamps with brightness change (PWM).
+- Red back lights.
+- Parking lights.
+## Usage
+1. Clone repo.
+2. Make shure you have avr-gcc, compile all.
+3. Burn your mcu.
+```bash
+$ git clone https://github.com/Zulljon/my-car-avr-solution.git
+$ cd my-car-avr-solution
+$ ./compile.sh clean all
+$ ./compile.sh burn rx
+```
 
-Програмный ШИМ. Работать будет гдето на частоте 25 кГц, функция прикручена к апаратному ШИМу МК работающему в режиме СТС.
-По интерапту инкрементируем значение програмного шима, после проверяем на совпадение с переменными для 2-х движков (они же скорости), если тру до дергаем ножки МК в "0", также проверяем на совпадение с переменной максимального числа тактов (аля частота ШИМа) попутно обнуляем счетчик и дёргаем ножки в "1"
+## How it works
+I was wanted to build such car in pair with android smartphone to control via bluetooth. But all massages receiving throw UART, so now the device can work with any uart radio modules (bluetooth or simple RF395)( for now in one direction). All data packing in 1 byte in transmitter and parsing in receiver, so this byte can care any kind of information about only one part of functions described in [fucntions](#functions). So massage are asynchronous, states of all parts save in RAM while device power on and just need/wait to be changed.
+```
+xxxyyyyy
+```
+- `xxx` - 3 major bits is assignation of blocks
+-  `yyyyy` -  5 minor bits value of some parameter (for example brightness of headlamps 0..32), or it can be `qwert` - state of 1 of 5 leds `LEDq`,`LEDw`,`LEDe`,`LEDr`,`LEDt`.
+
+So I notice that I am create a my own protocol. This byte call uart receive interrupt in MCU, massage is parsed and sends to value in RAM. from value in RAM thru main cycle setting up all periphery.
+
+
+## Used programs
+At the begining code was writen in Atmel Studio, after i start to use linux and made little fix to studio Makefile to compile under linux.
+- /bin/bash
+- GNU AVR Toolchain
+- Atom
+- Atmel Studio
+- make
+- avrdude
+
+ P.S. I will add links later.
